@@ -2,8 +2,7 @@
 
 public enum RoomCategory
 {
-    Budget,
-    Standard,
-    Deluxe,
-    Suite
+    Standard = 0,
+    Deluxe = 1,
+    Suite = 2
 }

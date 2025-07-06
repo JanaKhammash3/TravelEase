@@ -36,5 +36,7 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             _context.Hotels.Remove(hotel);
             await _context.SaveChangesAsync();
         }
+        
+        
     }
 }

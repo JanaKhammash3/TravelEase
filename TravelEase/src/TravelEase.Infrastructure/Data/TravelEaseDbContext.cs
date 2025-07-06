@@ -54,13 +54,13 @@ public class TravelEaseDbContext : DbContext
             .HasOne(d => d.Hotel)
             .WithMany()
             .HasForeignKey(d => d.HotelId)
-            .OnDelete(DeleteBehavior.Restrict); // ⛔ Prevent cascade cycles
+            .OnDelete(DeleteBehavior.Restrict); 
 
         modelBuilder.Entity<Discount>()
             .HasOne(d => d.Room)
             .WithMany()
             .HasForeignKey(d => d.RoomId)
-            .OnDelete(DeleteBehavior.Restrict); // ⛔ Prevent cascade cycles
+            .OnDelete(DeleteBehavior.Restrict); 
 
     }
 }

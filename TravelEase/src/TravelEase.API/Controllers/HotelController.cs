@@ -50,5 +50,13 @@ namespace TravelEase.API.Controllers
             await _hotelService.DeleteHotelAsync(id);
             return Ok(new { message = "Hotel deleted successfully." });
         }
+        
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] SearchHotelsQuery query)
+        {
+            var results = await _hotelService.SearchHotelsAsync(query);
+            return Ok(results);
+        }
+
     }
 }

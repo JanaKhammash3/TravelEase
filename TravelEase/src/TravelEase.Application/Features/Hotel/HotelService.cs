@@ -67,5 +67,27 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
             if (hotel != null)
                 await _hotelRepository.DeleteAsync(hotel);
         }
+
+        public async Task<IEnumerable<Domain.Entities.Hotel>> SearchHotelsAsync(SearchHotelsQuery query)
+        {
+            var hotels = await _hotelRepository.GetAllAsync(); // Already includes City
+            var filtered = hotels.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Name))
+                filtered = filtered.Where(h => h.Name.Contains(query.Name));
+
+            if (!string.IsNullOrWhiteSpace(query.CityName))
+                filtered = filtered.Where(h => h.City != null && h.City.Name.Contains(query.CityName));
+
+            if (!string.IsNullOrWhiteSpace(query.Location))
+                filtered = filtered.Where(h => h.Location.Contains(query.Location));
+
+            if (query.StarRating.HasValue)
+                filtered = filtered.Where(h => h.StarRating == query.StarRating.Value);
+
+            return filtered.ToList();
+        }
+
+
     }
 }
