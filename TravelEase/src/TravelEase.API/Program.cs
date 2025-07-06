@@ -11,8 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TravelEase.TravelEase.Application.Features.Auth;
+using TravelEase.TravelEase.Application.Features.Hotel;
+using TravelEase.TravelEase.Application.Features.Review;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,8 +55,13 @@ builder.Services.AddDbContext<TravelEaseDbContext>(options =>
 
 // Dependency Injection - Services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<HotelService>();
+builder.Services.AddScoped<ReviewService>();
 
 // Dependency Injection - Repositories
+builder.Services.AddScoped<HotelRepository>();
+builder.Services.AddScoped<ReviewRepository>();
+
 
 // Optional: Enable CORS (for frontend calls)
 builder.Services.AddCors(options =>

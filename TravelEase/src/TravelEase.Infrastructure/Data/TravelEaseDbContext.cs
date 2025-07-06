@@ -49,5 +49,18 @@ public class TravelEaseDbContext : DbContext
             .HasMany(u => u.Reviews)
             .WithOne(r => r.User)
             .HasForeignKey(r => r.UserId);
+        
+        modelBuilder.Entity<Discount>()
+            .HasOne(d => d.Hotel)
+            .WithMany()
+            .HasForeignKey(d => d.HotelId)
+            .OnDelete(DeleteBehavior.Restrict); // ⛔ Prevent cascade cycles
+
+        modelBuilder.Entity<Discount>()
+            .HasOne(d => d.Room)
+            .WithMany()
+            .HasForeignKey(d => d.RoomId)
+            .OnDelete(DeleteBehavior.Restrict); // ⛔ Prevent cascade cycles
+
     }
 }
