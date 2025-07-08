@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TravelEase.Application.Features.Hotel;
+using TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Application.Features.Hotel;
+using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.API.Controllers
 {
@@ -7,9 +10,9 @@ namespace TravelEase.API.Controllers
     [Route("api/[controller]")]
     public class HotelController : ControllerBase
     {
-        private readonly HotelService _hotelService;
+        private readonly IHotelService _hotelService;
 
-        public HotelController(HotelService hotelService)
+        public HotelController(IHotelService hotelService)
         {
             _hotelService = hotelService;
         }
@@ -25,8 +28,7 @@ namespace TravelEase.API.Controllers
         public async Task<IActionResult> GetHotelById(int id)
         {
             var hotel = await _hotelService.GetHotelByIdAsync(id);
-            if (hotel == null) return NotFound();
-            return Ok(hotel);
+            return hotel == null ? NotFound() : Ok(hotel);
         }
 
         [HttpPost]
@@ -36,10 +38,9 @@ namespace TravelEase.API.Controllers
             return Ok(new { message = "Hotel created successfully." });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateHotel(int id, [FromBody] UpdateHotelCommand cmd)
+        [HttpPut]
+        public async Task<IActionResult> UpdateHotel([FromBody] UpdateHotelCommand cmd)
         {
-            cmd.Id = id;
             await _hotelService.UpdateHotelAsync(cmd);
             return Ok(new { message = "Hotel updated successfully." });
         }
@@ -50,13 +51,19 @@ namespace TravelEase.API.Controllers
             await _hotelService.DeleteHotelAsync(id);
             return Ok(new { message = "Hotel deleted successfully." });
         }
-        
-        [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] SearchHotelsQuery query)
+
+        [HttpPost("search")]
+        public async Task<IActionResult> SearchHotels([FromBody] SearchHotelsQuery query)
         {
-            var results = await _hotelService.SearchHotelsAsync(query);
-            return Ok(results);
+            var result = await _hotelService.SearchHotelsAsync(query);
+            return Ok(result);
         }
 
+        [HttpGet("featured")]
+        public async Task<IActionResult> GetFeaturedHotels()
+        {
+            var result = await _hotelService.GetFeaturedHotelsAsync();
+            return Ok(result);
+        }
     }
 }

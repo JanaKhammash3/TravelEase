@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Infrastructure.Data;
 
 namespace TravelEase.TravelEase.Infrastructure.Repositories
 {
-    public class HotelRepository
+    public class HotelRepository : IHotelRepository
     {
         private readonly TravelEaseDbContext _context;
 
@@ -13,11 +15,21 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Hotel>> GetAllAsync() =>
-            await _context.Hotels.Include(h => h.City).ToListAsync();
+        public async Task<List<Hotel>> GetAllAsync()
+        {
+            return await _context.Hotels
+                .Include(h => h.City)
+                .Include(h => h.Rooms)
+                .ToListAsync();
+        }
 
-        public async Task<Hotel?> GetByIdAsync(int id) =>
-            await _context.Hotels.Include(h => h.City).FirstOrDefaultAsync(h => h.Id == id);
+        public async Task<Hotel?> GetByIdAsync(int id)
+        {
+            return await _context.Hotels
+                .Include(h => h.City)
+                .Include(h => h.Rooms)
+                .FirstOrDefaultAsync(h => h.Id == id);
+        }
 
         public async Task AddAsync(Hotel hotel)
         {
@@ -36,26 +48,31 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             _context.Hotels.Remove(hotel);
             await _context.SaveChangesAsync();
         }
-        
-        public List<Room> GetAvailableRoomsForHotel(int hotelId, DateTime checkIn, DateTime checkOut, int adults, int children)
+
+        public async Task<List<Hotel>> GetFeaturedHotelsAsync()
         {
-            return _context.Rooms
-                .Where(room =>
-                    room.HotelId == hotelId &&
-                    room.CapacityAdults >= adults &&
-                    room.CapacityChildren >= children &&
-                    !_context.Bookings.Any(b =>
-                        b.RoomId == room.Id &&
-                        (
-                            (checkIn >= b.CheckIn && checkIn < b.CheckOut) ||
-                            (checkOut > b.CheckIn && checkOut <= b.CheckOut) ||
-                            (checkIn <= b.CheckIn && checkOut >= b.CheckOut)
-                        )
-                    )
-                ).ToList();
+            return await _context.Hotels
+                .Where(h => h.IsFeatured)
+                .OrderByDescending(h => h.StarRating)
+                .Take(5)
+                .ToListAsync();
         }
 
-        
-        
+        public IEnumerable<Room> GetAvailableRoomsForHotel(int hotelId, DateTime checkIn, DateTime checkOut, int adults, int children)
+        {
+            return _context.Rooms
+                .Where(r => r.HotelId == hotelId &&
+                            r.CapacityAdults >= adults &&
+                            r.CapacityChildren >= children &&
+                            !_context.Bookings.Any(b =>
+                                b.RoomId == r.Id &&
+                                (
+                                    (checkIn >= b.CheckIn && checkIn < b.CheckOut) ||
+                                    (checkOut > b.CheckIn && checkOut <= b.CheckOut) ||
+                                    (checkIn <= b.CheckIn && checkOut >= b.CheckOut)
+                                )
+                            ))
+                .ToList();
+        }
     }
 }

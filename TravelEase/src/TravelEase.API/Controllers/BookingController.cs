@@ -47,11 +47,11 @@ public class BookingController : ControllerBase
         return Ok(new { message = "✅ Booking updated" });
     }
 
-    [HttpGet("search")]
+   /* [HttpGet("search")]
     public async Task<IActionResult> Search([FromQuery] SearchBookingsQuery query)
     {
         var results = await _bookingService.SearchBookingsAsync(query);
         return Ok(results);
-    }
+    }*/
 
 }

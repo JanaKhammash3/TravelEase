@@ -59,10 +59,10 @@ public class BookingService
 
         await _bookingRepository.UpdateAsync(booking);
     }
-    public async Task<IEnumerable<Domain.Entities.Booking>> SearchBookingsAsync(SearchBookingsQuery query)
+    /*public async Task<IEnumerable<Domain.Entities.Booking>> SearchBookingsAsync(SearchBookingsQuery query)
     {
         return await _bookingRepository.SearchAsync(query);
-    }
+    }*/
 
 
 }

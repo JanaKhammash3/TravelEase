@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Infrastructure.Data;
 
@@ -52,7 +51,7 @@ public class BookingRepository
                            b.CheckOut > checkIn); // overlap logic
     }
     
-    public async Task<IEnumerable<Booking>> SearchAsync(SearchBookingsQuery query)
+   /* public async Task<IEnumerable<Booking>> SearchAsync(SearchBookingsQuery query)
     {
         var bookings = _context.Bookings
             .Include(b => b.Room)
@@ -73,6 +72,6 @@ public class BookingRepository
 
         return await bookings.ToListAsync();
     }
-
+*/
 
 }
