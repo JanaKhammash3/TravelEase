@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Application.DTOs;
+using System.Linq;
 
 namespace TravelEase.TravelEase.Infrastructure.Repositories
 {
@@ -74,5 +75,62 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
                             ))
                 .ToList();
         }
+        
+        public async Task RecordHotelViewAsync(int userId, int hotelId)
+        {
+            var view = new HotelView
+            {
+                UserId = userId,
+                HotelId = hotelId,
+                ViewedAt = DateTime.UtcNow
+            };
+            _context.HotelViews.Add(view);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<HotelDto>> GetRecentlyVisitedHotelsAsync(int userId, int count = 5)
+        {
+            var recent = await _context.HotelViews
+                .Where(v => v.UserId == userId)
+                .OrderByDescending(v => v.ViewedAt)
+                .Select(v => new HotelDto
+                {
+                    Id = v.Hotel.Id,
+                    Name = v.Hotel.Name,
+                    City = v.Hotel.City.Name, // ✅ FIXED
+                    StarRating = v.Hotel.StarRating,
+                    ThumbnailUrl = v.Hotel.ThumbnailUrl
+                })
+
+                .DistinctBy(h => h.Id)
+                .Take(count)
+                .ToListAsync();
+
+            return recent;
+        }
+
+
+
+        public async Task<List<TrendingCityDto>> GetTrendingCitiesAsync(int count = 5)
+        {
+            var topCities = await _context.HotelViews
+                .GroupBy(v => v.Hotel.City)
+                .Select(g => new TrendingCityDto
+                {
+                    City = g.Key.Name, // ✅ FIXED
+                    VisitCount = g.Count(),
+                    ThumbnailUrl = _context.Hotels
+                        .Where(h => h.City.Id == g.Key.Id)
+                        .Select(h => h.ThumbnailUrl)
+                        .FirstOrDefault() ?? ""
+                })
+
+                .OrderByDescending(x => x.VisitCount)
+                .Take(count)
+                .ToListAsync();
+
+            return topCities;
+        }
+
     }
 }

@@ -10,9 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TravelEase.Application.Features.Hotel;
-using TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Application.Features.Auth;
+using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Features.City;
 using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Features.Review;
@@ -62,13 +61,16 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHotelService, HotelService>(); // from Application.Features.Hotel
 builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<RoomService>();
-builder.Services.AddScoped<CityService>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<BookingService>();
 
 // Repositories
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
-builder.Services.AddScoped<ReviewRepository>();
-
-
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 // Optional: Enable CORS (for frontend calls)
 builder.Services.AddCors(options =>

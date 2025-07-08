@@ -1,20 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Features.Hotel;
+﻿using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Infrastructure.Data;
 
-namespace TravelEase.Application.Features.Hotel
+namespace TravelEase.TravelEase.Application.Features.Hotel
 {
     public class HotelService : IHotelService
     {
         private readonly IHotelRepository _hotelRepository;
-        private readonly TravelEaseDbContext _db;
 
-        public HotelService(IHotelRepository hotelRepository, TravelEaseDbContext db)
+        public HotelService(IHotelRepository hotelRepository)
         {
             _hotelRepository = hotelRepository;
-            _db = db;
         }
 
         public async Task<List<TravelEase.Domain.Entities.Hotel>> GetAllHotelsAsync()
@@ -102,6 +97,21 @@ namespace TravelEase.Application.Features.Hotel
         public async Task<List<TravelEase.Domain.Entities.Hotel>> GetFeaturedHotelsAsync()
         {
             return await _hotelRepository.GetFeaturedHotelsAsync();
+        }
+
+        public async Task RecordHotelViewAsync(int userId, int hotelId)
+        {
+            await _hotelRepository.RecordHotelViewAsync(userId, hotelId);
+        }
+
+        public async Task<List<HotelDto>> GetRecentlyVisitedHotelsAsync(int userId, int count = 5)
+        {
+            return await _hotelRepository.GetRecentlyVisitedHotelsAsync(userId, count);
+        }
+
+        public async Task<List<TrendingCityDto>> GetTrendingCitiesAsync(int count = 5)
+        {
+            return await _hotelRepository.GetTrendingCitiesAsync(count);
         }
     }
 }

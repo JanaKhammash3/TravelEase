@@ -14,6 +14,7 @@ public class TravelEaseDbContext : DbContext
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Discount> Discounts { get; set; }
+    public DbSet<HotelView> HotelViews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

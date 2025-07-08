@@ -1,77 +1,50 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Infrastructure.Data;
 
-namespace TravelEase.TravelEase.Infrastructure.Repositories;
-
-public class BookingRepository
+namespace TravelEase.TravelEase.Infrastructure.Repositories
 {
-    private readonly TravelEaseDbContext _context;
-
-    public BookingRepository(TravelEaseDbContext context)
+    public class BookingRepository : IBookingRepository
     {
-        _context = context;
+        private readonly TravelEaseDbContext _db;
+
+        public BookingRepository(TravelEaseDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<List<Booking>> GetAllAsync() => await _db.Bookings.ToListAsync();
+
+        public async Task<Booking?> GetByIdAsync(int id) => await _db.Bookings.FindAsync(id);
+
+        public async Task AddAsync(Booking booking)
+        {
+            _db.Bookings.Add(booking);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Booking booking)
+        {
+            _db.Bookings.Update(booking);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Booking booking)
+        {
+            _db.Bookings.Remove(booking);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsRoomAvailableAsync(int roomId, DateTime checkIn, DateTime checkOut)
+        {
+            return !await _db.Bookings.AnyAsync(b =>
+                b.RoomId == roomId &&
+                (
+                    (checkIn >= b.CheckIn && checkIn < b.CheckOut) ||
+                    (checkOut > b.CheckIn && checkOut <= b.CheckOut) ||
+                    (checkIn <= b.CheckIn && checkOut >= b.CheckOut)
+                ));
+        }
     }
-
-    public async Task<List<Booking>> GetAllAsync() =>
-        await _context.Bookings
-            .Include(b => b.User)
-            .Include(b => b.Room)
-            .ThenInclude(r => r.Hotel)
-            .ToListAsync();
-
-    public async Task<Booking?> GetByIdAsync(int id) =>
-        await _context.Bookings
-            .Include(b => b.User)
-            .Include(b => b.Room)
-            .FirstOrDefaultAsync(b => b.Id == id);
-
-    public async Task AddAsync(Booking booking)
-    {
-        _context.Bookings.Add(booking);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(Booking booking)
-    {
-        _context.Bookings.Remove(booking);
-        await _context.SaveChangesAsync();
-    }
-    
-    public async Task UpdateAsync(Booking booking)
-    {
-        _context.Bookings.Update(booking);
-        await _context.SaveChangesAsync();
-    }
-    public async Task<bool> IsRoomAvailableAsync(int roomId, DateTime checkIn, DateTime checkOut)
-    {
-        return !await _context.Bookings
-            .AnyAsync(b => b.RoomId == roomId &&
-                           b.CheckIn < checkOut &&
-                           b.CheckOut > checkIn); // overlap logic
-    }
-    
-   /* public async Task<IEnumerable<Booking>> SearchAsync(SearchBookingsQuery query)
-    {
-        var bookings = _context.Bookings
-            .Include(b => b.Room)
-            .Include(b => b.User)
-            .AsQueryable();
-
-        if (query.UserId.HasValue)
-            bookings = bookings.Where(b => b.UserId == query.UserId.Value);
-
-        if (query.RoomId.HasValue)
-            bookings = bookings.Where(b => b.RoomId == query.RoomId.Value);
-
-        if (query.CheckIn.HasValue)
-            bookings = bookings.Where(b => b.CheckIn.Date == query.CheckIn.Value.Date);
-
-        if (query.CheckOut.HasValue)
-            bookings = bookings.Where(b => b.CheckOut.Date == query.CheckOut.Value.Date);
-
-        return await bookings.ToListAsync();
-    }
-*/
-
 }

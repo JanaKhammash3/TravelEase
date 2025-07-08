@@ -1,22 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Infrastructure.Data;
+﻿using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.TravelEase.Application.Features.City
 {
-    public class CityService
+    public class CityService : ICityService
     {
-        private readonly TravelEaseDbContext _db;
+        private readonly ICityRepository _cityRepository;
 
-        public CityService(TravelEaseDbContext db)
+        public CityService(ICityRepository cityRepository)
         {
-            _db = db;
+            _cityRepository = cityRepository;
         }
 
         public async Task<List<Domain.Entities.City>> GetAllCitiesAsync()
-        {
-            return await _db.Cities.ToListAsync();
-        }
+            => await _cityRepository.GetAllAsync();
 
         public async Task CreateCityAsync(CreateCityCommand cmd)
         {
@@ -26,42 +22,29 @@ namespace TravelEase.TravelEase.Application.Features.City
                 Country = cmd.Country,
                 PostOffice = cmd.PostOffice
             };
-
-            _db.Cities.Add(city);
-            await _db.SaveChangesAsync();
+            await _cityRepository.AddAsync(city);
         }
 
         public async Task DeleteCityAsync(int id)
         {
-            var city = await _db.Cities.FindAsync(id);
+            var city = await _cityRepository.GetByIdAsync(id);
             if (city != null)
-            {
-                _db.Cities.Remove(city);
-                await _db.SaveChangesAsync();
-            }
+                await _cityRepository.DeleteAsync(city);
         }
+
         public async Task UpdateCityAsync(UpdateCityCommand cmd)
         {
-            var city = await _db.Cities.FindAsync(cmd.Id);
+            var city = await _cityRepository.GetByIdAsync(cmd.Id);
             if (city == null) throw new Exception("City not found");
 
             city.Name = cmd.Name;
             city.Country = cmd.Country;
             city.PostOffice = cmd.PostOffice;
 
-            _db.Cities.Update(city);
-            await _db.SaveChangesAsync();
+            await _cityRepository.UpdateAsync(city);
         }
-        
+
         public async Task<List<Domain.Entities.City>> SearchCitiesAsync(string keyword, int page, int pageSize)
-        {
-            return await _db.Cities
-                .Where(c => c.Name.Contains(keyword) || c.Country.Contains(keyword))
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-        }
-
-
+            => await _cityRepository.SearchAsync(keyword, page, pageSize);
     }
 }

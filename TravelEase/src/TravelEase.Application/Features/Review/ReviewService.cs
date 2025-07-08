@@ -1,12 +1,10 @@
-﻿using TravelEase.TravelEase.Infrastructure.Repositories;
-
-namespace TravelEase.TravelEase.Application.Features.Review
+﻿namespace TravelEase.TravelEase.Application.Features.Review
 {
     public class ReviewService
     {
-        private readonly ReviewRepository _reviewRepository;
+        private readonly IReviewRepository _reviewRepository;
 
-        public ReviewService(ReviewRepository reviewRepository)
+        public ReviewService(IReviewRepository reviewRepository)
         {
             _reviewRepository = reviewRepository;
         }

@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TravelEase.Application.Features.Hotel;
-using TravelEase.Application.Interfaces;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.API.Controllers
+namespace TravelEase.TravelEase.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class HotelController : ControllerBase
     {
         private readonly IHotelService _hotelService;
+        private readonly IHotelRepository _hotelRepository;
 
-        public HotelController(IHotelService hotelService)
+        public HotelController(IHotelService hotelService, IHotelRepository hotelRepository)
         {
             _hotelService = hotelService;
+            _hotelRepository = hotelRepository;
         }
 
         [HttpGet]
@@ -65,5 +68,42 @@ namespace TravelEase.API.Controllers
             var result = await _hotelService.GetFeaturedHotelsAsync();
             return Ok(result);
         }
+
+        // ✅ Record view when user visits hotel page
+        [HttpPost("{hotelId}/view")]
+        public async Task<IActionResult> RecordHotelView(int hotelId)
+        {
+            int userId = GetUserIdFromToken();
+            await _hotelRepository.RecordHotelViewAsync(userId, hotelId);
+            return Ok();
+        }
+
+        // ✅ Get top 5 most visited cities
+        [HttpGet("trending-destinations")]
+        public async Task<IActionResult> GetTrendingDestinations()
+        {
+            var topCities = await _hotelRepository.GetTrendingCitiesAsync();
+            return Ok(topCities);
+        }
+
+        // ✅ Helper to extract user ID from JWT token
+        private int GetUserIdFromToken()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+                throw new UnauthorizedAccessException("User ID not found in token.");
+
+            return int.Parse(userIdClaim.Value);
+        }
+        
+        [HttpGet("recent-hotels")]
+        public async Task<IActionResult> GetRecentHotels([FromQuery] int count = 5)
+        {
+            int userId = GetUserIdFromToken();
+            var hotels = await _hotelRepository.GetRecentlyVisitedHotelsAsync(userId, count);
+            return Ok(hotels);
+        }
+
     }
 }

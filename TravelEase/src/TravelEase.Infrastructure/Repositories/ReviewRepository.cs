@@ -4,10 +4,10 @@ using TravelEase.TravelEase.Infrastructure.Data;
 
 namespace TravelEase.TravelEase.Infrastructure.Repositories
 {
-    public class ReviewRepository
+    public class ReviewRepository : IReviewRepository
     {
         private readonly TravelEaseDbContext _context;
-
+    
         public ReviewRepository(TravelEaseDbContext context)
         {
             _context = context;
@@ -15,11 +15,7 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
 
         public async Task<List<Review>> GetByHotelIdAsync(int hotelId)
         {
-            return await _context.Reviews
-                .Include(r => r.User)
-                .Where(r => r.HotelId == hotelId)
-                .OrderByDescending(r => r.CreatedAt)
-                .ToListAsync();
+            return await _context.Reviews.Where(r => r.HotelId == hotelId).ToListAsync();
         }
 
         public async Task AddAsync(Review review)
@@ -38,4 +34,5 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             }
         }
     }
+
 }

@@ -1,101 +1,91 @@
-﻿namespace TravelEase.TravelEase.Application.Features.Auth;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Entities;
-using TravelEase.Infrastructure.Data;
+using Microsoft.Extensions.Configuration;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Entities;
 
-public class AuthService : IAuthService
+namespace TravelEase.TravelEase.Application.Features.Auth
 {
-    private readonly TravelEaseDbContext _context;
-    private readonly IConfiguration _configuration;
-
-    public AuthService(TravelEaseDbContext context, IConfiguration configuration)
+    public class AuthService : IAuthService
     {
-        _context = context;
-        _configuration = configuration;
-    }
+        private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
 
-    public async Task<LoginResponseDto> LoginAsync(LoginCommand command)
-    {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == command.Email);
-        if (user == null || !BCrypt.Net.BCrypt.Verify(command.Password, user.PasswordHash))
-            throw new Exception("Invalid credentials");
-
-        var token = GenerateToken(user);
-
-        return new LoginResponseDto
+        public AuthService(IUserRepository userRepository, IConfiguration configuration)
         {
-            Token = token,
-            FullName = user.FullName,
-            Email = user.Email,
-            Role = user.Role.ToString()
-        };
-    }
+            _userRepository = userRepository;
+            _configuration = configuration;
+        }
 
-    public async Task<LoginResponseDto> RegisterAsync(RegisterCommand command)
-    {
-        if (await _context.Users.AnyAsync(u => u.Email == command.Email))
-            throw new Exception("User already exists");
-
-        var user = new User
+        public async Task<LoginResponseDto> LoginAsync(LoginCommand command)
         {
-            FullName = command.FullName,
-            Email = command.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
-            Role = Domain.Enums.UserRole.User
-        };
+            var user = await _userRepository.GetByEmailAsync(command.Email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(command.Password, user.PasswordHash))
+                throw new Exception("Invalid credentials");
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+            var token = GenerateToken(user);
 
-        var token = GenerateToken(user);
+            return new LoginResponseDto
+            {
+                Token = token,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = user.Role.ToString()
+            };
+        }
 
-        return new LoginResponseDto
+        public async Task<LoginResponseDto> RegisterAsync(RegisterCommand command)
         {
-            Token = token,
-            FullName = user.FullName,
-            Email = user.Email,
-            Role = user.Role.ToString()
-        };
-    }
+            if (await _userRepository.ExistsByEmailAsync(command.Email))
+                throw new Exception("User already exists");
 
-    private string GenerateToken(User user)
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new Exception("Missing JWT key"));
+            var user = new User
+            {
+                FullName = command.FullName,
+                Email = command.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
+                Role = Domain.Enums.UserRole.User
+            };
 
-        var claims = new[]
+            await _userRepository.AddAsync(user);
+            var token = GenerateToken(user);
+
+            return new LoginResponseDto
+            {
+                Token = token,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = user.Role.ToString()
+            };
+        }
+
+        private string GenerateToken(User user)
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.FullName),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
-        };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
 
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddHours(6),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
-            Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"]
-        };
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
+            };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    }
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(6),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"]
+            };
 
-    // ✅ Nested DTO class
-    public class LoginResponseDto
-    {
-        public string Token { get; set; }
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        public string Role { get; set; }
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
     }
 }

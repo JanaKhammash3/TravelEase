@@ -1,32 +1,30 @@
-﻿using TravelEase.TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Domain.Enums;
 
 namespace TravelEase.TravelEase.Application.Features.Room
 {
     public class RoomService
     {
-        private readonly TravelEaseDbContext _db;
+        private readonly IRoomRepository _roomRepository;
 
-        public RoomService(TravelEaseDbContext db)
+        public RoomService(IRoomRepository roomRepository)
         {
-            _db = db;
+            _roomRepository = roomRepository;
         }
 
-        public async Task<List<Domain.Entities.Room>> GetAllRoomsAsync()
+        public async Task<List<TravelEase.Domain.Entities.Room>> GetAllRoomsAsync()
         {
-            return await _db.Rooms.ToListAsync();
+            return await _roomRepository.GetAllRoomsAsync();
         }
 
-        public async Task<Domain.Entities.Room?> GetRoomByIdAsync(int id)
+        public async Task<TravelEase.Domain.Entities.Room?> GetRoomByIdAsync(int id)
         {
-            return await _db.Rooms.FindAsync(id);
+            return await _roomRepository.GetRoomByIdAsync(id);
         }
 
         public async Task CreateRoomAsync(CreateRoomCommand cmd)
         {
-            var room = new Domain.Entities.Room
+            var room = new TravelEase.Domain.Entities.Room
             {
                 Number = cmd.Number,
                 CapacityAdults = cmd.CapacityAdults,
@@ -36,23 +34,19 @@ namespace TravelEase.TravelEase.Application.Features.Room
                 HotelId = cmd.HotelId
             };
 
-            _db.Rooms.Add(room);
-            await _db.SaveChangesAsync();
+            await _roomRepository.AddRoomAsync(room);
         }
 
         public async Task DeleteRoomAsync(int id)
         {
-            var room = await _db.Rooms.FindAsync(id);
+            var room = await _roomRepository.GetRoomByIdAsync(id);
             if (room != null)
-            {
-                _db.Rooms.Remove(room);
-                await _db.SaveChangesAsync();
-            }
+                await _roomRepository.DeleteRoomAsync(room);
         }
-        
+
         public async Task UpdateRoomAsync(UpdateRoomCommand cmd)
         {
-            var room = await _db.Rooms.FindAsync(cmd.Id);
+            var room = await _roomRepository.GetRoomByIdAsync(cmd.Id);
             if (room == null) throw new Exception("Room not found");
 
             room.Number = cmd.Number;
@@ -62,55 +56,12 @@ namespace TravelEase.TravelEase.Application.Features.Room
             room.Category = (RoomCategory)cmd.Category;
             room.HotelId = cmd.HotelId;
 
-            _db.Rooms.Update(room);
-            await _db.SaveChangesAsync();
+            await _roomRepository.UpdateRoomAsync(room);
         }
-        
-        public async Task<IEnumerable<Domain.Entities.Room>> SearchRoomsAsync(SearchRoomsQuery query)
+
+        public async Task<IEnumerable<TravelEase.Domain.Entities.Room>> SearchRoomsAsync(SearchRoomsQuery query)
         {
-            var rooms = _db.Rooms.AsQueryable();
-
-            if (query.HotelId.HasValue)
-                rooms = rooms.Where(r => r.HotelId == query.HotelId.Value);
-
-            if (query.MinPrice.HasValue)
-                rooms = rooms.Where(r => r.PricePerNight >= query.MinPrice.Value);
-
-            if (query.MaxPrice.HasValue)
-                rooms = rooms.Where(r => r.PricePerNight <= query.MaxPrice.Value);
-
-            if (query.Category.HasValue)
-                rooms = rooms.Where(r => (int)r.Category == query.Category.Value);
-
-            // Total guest filtering
-            if (query.Adults.HasValue)
-                rooms = rooms.Where(r => r.CapacityAdults >= query.Adults.Value);
-
-            if (query.Children.HasValue)
-                rooms = rooms.Where(r => r.CapacityChildren >= query.Children.Value);
-
-            // Optional: Check availability for selected date range — requires Booking table logic
-            if (query.CheckIn.HasValue && query.CheckOut.HasValue)
-            {
-                var checkIn = query.CheckIn.Value;
-                var checkOut = query.CheckOut.Value;
-
-                rooms = rooms.Where(r =>
-                    !_db.Bookings.Any(b =>
-                        b.RoomId == r.Id &&
-                        (
-                            (checkIn >= b.CheckIn && checkIn < b.CheckOut) ||
-                            (checkOut > b.CheckIn && checkOut <= b.CheckOut) ||
-                            (checkIn <= b.CheckIn && checkOut >= b.CheckOut)
-                        )
-                    )
-                );
-            }
-
-            return await rooms.ToListAsync();
+            return await _roomRepository.SearchRoomsAsync(query);
         }
-
-
-
     }
 }
