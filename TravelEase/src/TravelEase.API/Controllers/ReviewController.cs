@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Features.Review;
 
 namespace TravelEase.TravelEase.API.Controllers
@@ -22,7 +23,7 @@ namespace TravelEase.TravelEase.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReview([FromBody] CreateReviewCommand cmd)
+        public async Task<IActionResult> CreateReview([FromBody] ReviewDto cmd)
         {
             await _reviewService.CreateReviewAsync(cmd);
             return Ok(new { message = "Review added successfully." });

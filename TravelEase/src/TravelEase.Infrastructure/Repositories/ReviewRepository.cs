@@ -15,7 +15,12 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
 
         public async Task<List<Review>> GetByHotelIdAsync(int hotelId)
         {
-            return await _context.Reviews.Where(r => r.HotelId == hotelId).ToListAsync();
+            return await _context.Reviews
+                .Include(r => r.User)
+                .Where(r => r.HotelId == hotelId)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+            
         }
 
         public async Task AddAsync(Review review)

@@ -1,4 +1,4 @@
-﻿using TravelEase.TravelEase.Domain.Entities;
+﻿using TravelEase.TravelEase.Application.Features.Booking;
 
 namespace TravelEase.TravelEase.Application.Interfaces
 {
@@ -10,5 +10,6 @@ namespace TravelEase.TravelEase.Application.Interfaces
         Task UpdateAsync(Booking booking);
         Task DeleteAsync(Booking booking);
         Task<bool> IsRoomAvailableAsync(int roomId, DateTime checkIn, DateTime checkOut);
+        Task<List<Booking>> SearchBookingsAsync(SearchBookingsQuery query);
     }
 }

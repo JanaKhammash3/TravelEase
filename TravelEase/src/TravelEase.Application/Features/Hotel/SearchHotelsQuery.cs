@@ -4,13 +4,21 @@
     {
         public string? Name { get; set; }
         public string? CityName { get; set; }
-        public int? StarRating { get; set; }
         public string? Location { get; set; }
-        
-        public DateTime? CheckIn { get; set; } = DateTime.Today;
-        public DateTime? CheckOut { get; set; } = DateTime.Today.AddDays(1);
-        public int? Adults { get; set; } = 2;
-        public int? Children { get; set; } = 0;
-        public int? NumRooms { get; set; } = 1;
+        public int? StarRating { get; set; }
+
+        public DateTime? CheckIn { get; set; }
+        public DateTime? CheckOut { get; set; }
+        public int? NumRooms { get; set; }
+        public int? Adults { get; set; }
+        public int? Children { get; set; }
+
+        public decimal? MinPrice { get; set; }
+        public decimal? MaxPrice { get; set; }
+        public string? Amenities { get; set; } // Optional: comma-separated
+        public string? RoomCategory { get; set; } // Example: "Luxury", "Budget"
+
+        public int Page { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
 }

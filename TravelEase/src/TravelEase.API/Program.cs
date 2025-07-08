@@ -19,6 +19,7 @@ using TravelEase.TravelEase.Application.Features.Room;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Infrastructure.Data;
 using TravelEase.TravelEase.Infrastructure.Repositories;
+using TravelEase.TravelEase.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,8 @@ builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<RoomService>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Repositories
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
@@ -121,6 +124,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseStaticFiles(); 
 app.MapControllers();
 app.Run();

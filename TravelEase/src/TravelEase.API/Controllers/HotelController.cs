@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Interfaces;
+using Microsoft.AspNetCore.Http;
+using TravelEase.TravelEase.API.Models;
 
 namespace TravelEase.TravelEase.API.Controllers
 {
@@ -55,8 +57,9 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok(new { message = "Hotel deleted successfully." });
         }
 
-        [HttpPost("search")]
-        public async Task<IActionResult> SearchHotels([FromBody] SearchHotelsQuery query)
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchHotels([FromQuery] SearchHotelsQuery query)
+
         {
             var result = await _hotelService.SearchHotelsAsync(query);
             return Ok(result);
@@ -104,6 +107,46 @@ namespace TravelEase.TravelEase.API.Controllers
             var hotels = await _hotelRepository.GetRecentlyVisitedHotelsAsync(userId, count);
             return Ok(hotels);
         }
+        
+        [HttpPost("{id}/upload-images")]
+        public async Task<IActionResult> UploadImages(int id, [FromForm] HotelImageUploadDto dto)
+        {
+            var uploadResults = new List<(string FileName, Stream Stream)>();
+
+            foreach (var file in dto.Images)
+            {
+                uploadResults.Add((file.FileName, file.OpenReadStream()));
+            }
+
+            var urls = await _hotelService.UploadImagesAsync(dto.HotelId, uploadResults);
+            return Ok(urls);
+        }
+
+
+        [HttpGet("{id}/nearby")]
+        public async Task<IActionResult> GetNearbyAttractions(int id)
+        {
+            var hotel = await _hotelService.GetHotelByIdAsync(id);
+            if (hotel == null)
+                return NotFound("Hotel not found.");
+
+            // Mocked static attractions
+            var attractions = new List<object>
+            {
+                new { Name = "City Museum", Type = "Museum", DistanceKm = 1.5 },
+                new { Name = "Central Park", Type = "Park", DistanceKm = 0.8 },
+                new { Name = "Grand Theater", Type = "Entertainment", DistanceKm = 2.1 }
+            };
+
+            return Ok(new
+            {
+                Coordinates = new { hotel.Latitude, hotel.Longitude },
+                NearbyAttractions = attractions
+            });
+        }
+
+
+
 
     }
 }
