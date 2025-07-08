@@ -61,6 +61,7 @@ builder.Services.AddScoped<HotelService>();
 builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<RoomService>();
 builder.Services.AddScoped<CityService>();
+builder.Services.AddScoped<RoomService>();
 
 // Dependency Injection - Repositories
 builder.Services.AddScoped<HotelRepository>();

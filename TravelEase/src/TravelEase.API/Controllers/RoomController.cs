@@ -36,13 +36,7 @@ namespace TravelEase.API.Controllers
             await _roomService.CreateRoomAsync(cmd);
             return Ok(new { message = "Room created successfully" });
         }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CreateRoomCommand cmd)
-        {
-            await _roomService.UpdateRoomAsync(id, cmd);
-            return Ok(new { message = "Room updated successfully" });
-        }
+        
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -58,6 +52,14 @@ namespace TravelEase.API.Controllers
             await _roomService.UpdateRoomAsync(command);
             return Ok(new { message = "Room updated successfully" });
         }
+        
+        [HttpPost("search")]
+        public async Task<IActionResult> Search([FromBody] SearchRoomsQuery query)
+        {
+            var results = await _roomService.SearchRoomsAsync(query);
+            return Ok(results);
+        }
+
 
     }
 }

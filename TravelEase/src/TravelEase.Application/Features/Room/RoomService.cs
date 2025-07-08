@@ -40,21 +40,6 @@ namespace TravelEase.TravelEase.Application.Features.Room
             await _db.SaveChangesAsync();
         }
 
-        public async Task UpdateRoomAsync(int id, CreateRoomCommand cmd)
-        {
-            var room = await _db.Rooms.FindAsync(id);
-            if (room == null) return;
-
-            room.Number = cmd.Number;
-            room.CapacityAdults = cmd.CapacityAdults;
-            room.CapacityChildren = cmd.CapacityChildren;
-            room.PricePerNight = cmd.PricePerNight;
-            room.Category = cmd.Category;
-            room.HotelId = cmd.HotelId;
-
-            await _db.SaveChangesAsync();
-        }
-
         public async Task DeleteRoomAsync(int id)
         {
             var room = await _db.Rooms.FindAsync(id);
@@ -88,12 +73,6 @@ namespace TravelEase.TravelEase.Application.Features.Room
             if (query.HotelId.HasValue)
                 rooms = rooms.Where(r => r.HotelId == query.HotelId.Value);
 
-            if (query.CapacityAdults.HasValue)
-                rooms = rooms.Where(r => r.CapacityAdults >= query.CapacityAdults.Value);
-
-            if (query.CapacityChildren.HasValue)
-                rooms = rooms.Where(r => r.CapacityChildren >= query.CapacityChildren.Value);
-
             if (query.MinPrice.HasValue)
                 rooms = rooms.Where(r => r.PricePerNight >= query.MinPrice.Value);
 
@@ -103,8 +82,34 @@ namespace TravelEase.TravelEase.Application.Features.Room
             if (query.Category.HasValue)
                 rooms = rooms.Where(r => (int)r.Category == query.Category.Value);
 
+            // Total guest filtering
+            if (query.Adults.HasValue)
+                rooms = rooms.Where(r => r.CapacityAdults >= query.Adults.Value);
+
+            if (query.Children.HasValue)
+                rooms = rooms.Where(r => r.CapacityChildren >= query.Children.Value);
+
+            // Optional: Check availability for selected date range — requires Booking table logic
+            if (query.CheckIn.HasValue && query.CheckOut.HasValue)
+            {
+                var checkIn = query.CheckIn.Value;
+                var checkOut = query.CheckOut.Value;
+
+                rooms = rooms.Where(r =>
+                    !_db.Bookings.Any(b =>
+                        b.RoomId == r.Id &&
+                        (
+                            (checkIn >= b.CheckIn && checkIn < b.CheckOut) ||
+                            (checkOut > b.CheckIn && checkOut <= b.CheckOut) ||
+                            (checkIn <= b.CheckIn && checkOut >= b.CheckOut)
+                        )
+                    )
+                );
+            }
+
             return await rooms.ToListAsync();
         }
+
 
 
     }

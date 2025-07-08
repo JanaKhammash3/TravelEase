@@ -37,6 +37,25 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
         
+        public List<Room> GetAvailableRoomsForHotel(int hotelId, DateTime checkIn, DateTime checkOut, int adults, int children)
+        {
+            return _context.Rooms
+                .Where(room =>
+                    room.HotelId == hotelId &&
+                    room.CapacityAdults >= adults &&
+                    room.CapacityChildren >= children &&
+                    !_context.Bookings.Any(b =>
+                        b.RoomId == room.Id &&
+                        (
+                            (checkIn >= b.CheckIn && checkIn < b.CheckOut) ||
+                            (checkOut > b.CheckIn && checkOut <= b.CheckOut) ||
+                            (checkIn <= b.CheckIn && checkOut >= b.CheckOut)
+                        )
+                    )
+                ).ToList();
+        }
+
+        
         
     }
 }
