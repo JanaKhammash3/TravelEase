@@ -1,12 +1,13 @@
 # 🏨 TravelEase – Hotel Booking Backend API
 
-A backend **RESTful API** for a hotel and accommodation booking platform, built with **ASP.NET Core** and **Entity Framework Core**. It enables user authentication, hotel and room search, secure bookings, and full CRUD operations for cities, hotels, and rooms — all with robust unit testing.
+A backend **RESTful API** for a hotel booking system, built with **C#**, **ASP.NET Core**, and **Entity Framework Core**. It supports user authentication, hotel and room search, secure bookings, and full admin management. Features secure JWT authentication, role-based access control, and full unit testing.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Backend:** ASP.NET Core  
+- **Language:** C#  
+- **Framework:** ASP.NET Core  
 - **ORM:** Entity Framework Core  
 - **Database:** SQL Server  
 - **Authentication:** JWT (JSON Web Token)  
