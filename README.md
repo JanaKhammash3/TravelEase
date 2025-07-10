@@ -51,6 +51,7 @@ Includes unit test coverage for:
 ---
 
 ## 📁 Project Structure
+```bash
 TravelEase/
 ├── API/                # Controllers & Startup config
 ├── Application/        # DTOs, Interfaces, Services
