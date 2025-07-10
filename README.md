@@ -47,11 +47,8 @@ Includes unit test coverage for:
 - BookingService
 - RoomService
 - Admin CRUD Services
-
-Run tests with:
-
-```bash
-dotnet test
+  
+---
 
 ## 📁 Project Structure
 TravelEase/
