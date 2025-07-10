@@ -17,6 +17,7 @@ using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Features.Review;
 using TravelEase.TravelEase.Application.Features.Room;
 using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Application.Interfaces.Admin;
 using TravelEase.TravelEase.Infrastructure.Data;
 using TravelEase.TravelEase.Infrastructure.Repositories;
 using TravelEase.TravelEase.Infrastructure.Services;
@@ -66,6 +67,9 @@ builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IAdminHotelService, AdminHotelService>();
+builder.Services.AddScoped<IAdminRoomService, AdminRoomService>();
+builder.Services.AddScoped<IAdminCityService, AdminCityService>();
 
 // Repositories
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
