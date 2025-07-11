@@ -4,7 +4,7 @@
     {
         Card,
         PayPal,
-        Stripe,
-        BankTransfer
+        Cash,
+        Stripe 
     }
 }
