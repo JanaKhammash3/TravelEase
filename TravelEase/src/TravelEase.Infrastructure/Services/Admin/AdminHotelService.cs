@@ -60,8 +60,11 @@ public class AdminHotelService : IAdminHotelService
             Name = dto.Name,
             Owner = dto.Owner,
             StarRating = dto.StarRating,
+            Location = dto.Location,         
+            Amenities = dto.Amenities,       
             CityId = city.Id
         };
+
 
 
         _context.Hotels.Add(hotel);
