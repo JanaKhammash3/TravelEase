@@ -14,6 +14,7 @@ namespace TravelEase.TravelEase.Application.Interfaces
         Task DeleteHotelAsync(int id);
         Task<List<Hotel>> GetFeaturedHotelsAsync();
         Task<List<string>> UploadImagesAsync(int hotelId, List<(string FileName, Stream Content)> files);
+        Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls);
 
     }
 }

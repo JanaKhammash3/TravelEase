@@ -70,6 +70,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAdminHotelService, AdminHotelService>();
 builder.Services.AddScoped<IAdminRoomService, AdminRoomService>();
 builder.Services.AddScoped<IAdminCityService, AdminCityService>();
+builder.Services.AddSingleton<CloudinaryImageService>();
 
 // Repositories
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();

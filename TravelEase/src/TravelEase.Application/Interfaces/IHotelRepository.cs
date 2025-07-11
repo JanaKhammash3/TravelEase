@@ -15,6 +15,7 @@ namespace TravelEase.TravelEase.Application.Interfaces
         Task RecordHotelViewAsync(int userId, int hotelId);
         Task<List<HotelDto>> GetRecentlyVisitedHotelsAsync(int userId, int count = 5);
         Task<List<TrendingCityDto>> GetTrendingCitiesAsync(int count = 5);
+        Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls);
 
     }
 }

@@ -5,6 +5,7 @@ using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using TravelEase.TravelEase.API.Models;
+using TravelEase.TravelEase.Infrastructure.Services;
 
 namespace TravelEase.TravelEase.API.Controllers
 {
@@ -107,21 +108,23 @@ namespace TravelEase.TravelEase.API.Controllers
             var hotels = await _hotelRepository.GetRecentlyVisitedHotelsAsync(userId, count);
             return Ok(hotels);
         }
-        
         [HttpPost("{id}/upload-images")]
-        public async Task<IActionResult> UploadImages(int id, [FromForm] HotelImageUploadDto dto)
+        public async Task<IActionResult> UploadImages(int id, [FromForm] HotelImageUploadDto dto, [FromServices] CloudinaryImageService cloudinaryService)
         {
-            var uploadResults = new List<(string FileName, Stream Stream)>();
+            var urls = new List<string>();
 
             foreach (var file in dto.Images)
             {
-                uploadResults.Add((file.FileName, file.OpenReadStream()));
+                var url = await cloudinaryService.UploadImageAsync(file);
+                urls.Add(url);
             }
 
-            var urls = await _hotelService.UploadImagesAsync(dto.HotelId, uploadResults);
-            return Ok(urls);
+            await _hotelService.SaveHotelImageUrlsAsync(id, urls); // <-- Save to DB
+
+            return Ok(new { UploadedUrls = urls });
         }
 
+        
 
         [HttpGet("{id}/nearby")]
         public async Task<IActionResult> GetNearbyAttractions(int id)

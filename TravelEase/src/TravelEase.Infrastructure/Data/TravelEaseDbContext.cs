@@ -18,11 +18,17 @@ public class TravelEaseDbContext : DbContext
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<HotelView> HotelViews { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<HotelImage> HotelImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Hotel>()
+            .HasMany(h => h.Images)
+            .WithOne(i => i.Hotel)
+            .HasForeignKey(i => i.HotelId)
+            .OnDelete(DeleteBehavior.Cascade);
         // Relationships
         modelBuilder.Entity<City>()
             .HasMany(c => c.Hotels)

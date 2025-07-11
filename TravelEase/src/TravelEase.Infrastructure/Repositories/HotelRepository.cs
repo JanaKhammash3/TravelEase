@@ -131,6 +131,19 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
 
             return topCities;
         }
+        
+        public async Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls)
+        {
+            var images = urls.Select(url => new HotelImage
+            {
+                HotelId = hotelId,
+                ImageUrl = url
+            }).ToList();
+
+            _context.HotelImages.AddRange(images);
+            await _context.SaveChangesAsync();
+        }
+
 
     }
 }

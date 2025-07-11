@@ -181,6 +181,11 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
             await _hotelRepository.UpdateAsync(hotel);
             return imageUrls;
         }
+        public async Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls)
+        {
+            await _hotelRepository.SaveHotelImageUrlsAsync(hotelId, urls);
+        }
+
 
 
     }
