@@ -1,19 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using TravelEase.TravelEase.API.Models;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.TravelEase.API.Controllers;
+namespace TravelEase.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PaymentController : ControllerBase
 {
+    private readonly IStripeSessionService _stripeService;
+
+    public PaymentController(IStripeSessionService stripeService)
+    {
+        _stripeService = stripeService;
+    }
+
     [HttpPost("create-checkout-session")]
     public IActionResult CreateCheckoutSession([FromBody] StripeCheckoutRequestDto dto)
     {
-        // Price estimation (simple: 1 night = $100, or replace with real logic)
         var nights = (dto.CheckOut - dto.CheckIn).Days;
-        var unitAmount = 10000L * nights; // $100/night -> Stripe uses cents
+        var unitAmount = 10000L * nights;
 
         var options = new SessionCreateOptions
         {
@@ -25,7 +33,7 @@ public class PaymentController : ControllerBase
                     PriceData = new SessionLineItemPriceDataOptions
                     {
                         Currency = "usd",
-                        UnitAmount = unitAmount, // Stripe expects amount in cents
+                        UnitAmount = unitAmount,
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
                             Name = $"Hotel Room Booking for User #{dto.UserId}"
@@ -49,9 +57,12 @@ public class PaymentController : ControllerBase
             }
         };
 
-        var service = new SessionService();
-        var session = service.Create(options);
+        var (sessionId, url) = _stripeService.CreateCheckoutSession(options);
 
-        return Ok(new { sessionId = session.Id, url = session.Url });
+        return Ok(new StripeCheckoutResponseDto
+        {
+            SessionId = sessionId,
+            Url = url
+        });
     }
 }

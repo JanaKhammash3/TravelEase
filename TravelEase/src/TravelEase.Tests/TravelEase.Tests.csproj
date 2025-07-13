@@ -33,6 +33,7 @@
     <ProjectReference Include="..\TravelEase.Infrastructure\TravelEase.Infrastructure.csproj" />
     <ProjectReference Include="..\TravelEase.Domain\TravelEase.Domain.csproj" />
     <ProjectReference Include="..\TravelEase.Application\TravelEase.Application.csproj" />
+    <ProjectReference Include="..\TravelEase.API\TravelEase.API.csproj" />
   </ItemGroup>
 
 </Project>

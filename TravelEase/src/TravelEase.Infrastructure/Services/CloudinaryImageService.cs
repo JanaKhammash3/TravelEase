@@ -1,23 +1,17 @@
 ﻿using CloudinaryDotNet;
+using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Http; 
-using Microsoft.Extensions.Configuration;
+using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.TravelEase.Infrastructure.Services
 {
-    public class CloudinaryImageService
+    public class CloudinaryImageService : IImageUploader
     {
-        private readonly Cloudinary _cloudinary;
+        private readonly ICloudinaryWrapper _wrapper;
 
-        public CloudinaryImageService(IConfiguration config)
+        public CloudinaryImageService(ICloudinaryWrapper wrapper)
         {
-            var account = new Account(
-                config["Cloudinary:CloudName"],
-                config["Cloudinary:ApiKey"],
-                config["Cloudinary:ApiSecret"]
-            );
-
-            _cloudinary = new Cloudinary(account);
+            _wrapper = wrapper;
         }
 
         public async Task<string> UploadImageAsync(IFormFile file)
@@ -33,8 +27,8 @@ namespace TravelEase.TravelEase.Infrastructure.Services
                 Overwrite = false
             };
 
-            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
-            return uploadResult.SecureUrl.ToString();
+            var result = await _wrapper.UploadImageAsync(uploadParams);
+            return result.SecureUrl?.ToString() ?? string.Empty;
         }
     }
 }

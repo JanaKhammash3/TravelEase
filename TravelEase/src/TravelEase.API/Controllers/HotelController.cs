@@ -109,7 +109,7 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok(hotels);
         }
         [HttpPost("{id}/upload-images")]
-        public async Task<IActionResult> UploadImages(int id, [FromForm] HotelImageUploadDto dto, [FromServices] CloudinaryImageService cloudinaryService)
+        public async Task<IActionResult> UploadImages(int id, [FromForm] HotelImageUploadDto dto, [FromServices] IImageUploader cloudinaryService)
         {
             var urls = new List<string>();
 
