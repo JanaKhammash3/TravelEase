@@ -11,5 +11,8 @@
         public DateTime CheckOut { get; set; }
         public decimal TotalPrice { get; set; }
         public string PaymentStatus { get; set; }
+
+        // ✅ Add this property for email delivery
+        public string UserEmail { get; set; }
     }
 }

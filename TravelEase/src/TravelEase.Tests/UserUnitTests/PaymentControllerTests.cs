@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using TravelEase.API.Controllers;
+using TravelEase.TravelEase.API.Controllers;
 using TravelEase.TravelEase.API.Models;
 using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Interfaces;

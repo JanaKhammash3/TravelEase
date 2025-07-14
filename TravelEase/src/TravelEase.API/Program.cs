@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 using TravelEase.TravelEase.Application.Features.Auth;
 using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Features.City;
@@ -18,14 +19,18 @@ using TravelEase.TravelEase.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ✅ Set QuestPDF license (Community Edition)
+QuestPDF.Settings.License = LicenseType.Community;
+
 // Add controllers
 builder.Services.AddControllers();
 
-// Load JWT config
+// ==========================
+// JWT Configuration
+// ==========================
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new Exception("Missing JWT key."));
 
-// Configure JWT authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -47,7 +52,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// Register EF Core DbContext
+// ==========================
+// Database Configuration
+// ==========================
 builder.Services.AddDbContext<TravelEaseDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -58,13 +65,37 @@ builder.Services.AddSingleton(sp =>
 {
     var config = builder.Configuration.GetSection("Cloudinary");
     var account = new Account(
-        config["CloudName"],
-        config["ApiKey"],
-        config["ApiSecret"]);
+        config["CloudName"] ?? throw new Exception("Missing Cloudinary:CloudName"),
+        config["ApiKey"] ?? throw new Exception("Missing Cloudinary:ApiKey"),
+        config["ApiSecret"] ?? throw new Exception("Missing Cloudinary:ApiSecret")
+    );
     return new Cloudinary(account);
 });
 
-// Services
+// ==========================
+// Email Configuration
+// ==========================
+builder.Services.AddScoped<Func<ISmtpClientWrapper>>(sp =>
+{
+    return () =>
+    {
+        var config = sp.GetRequiredService<IConfiguration>();
+
+        var host = config["Email:Host"] ?? throw new Exception("Missing Email:Host");
+        var portStr = config["Email:Port"] ?? throw new Exception("Missing Email:Port");
+        if (!int.TryParse(portStr, out var port))
+            throw new Exception("Invalid SMTP port in configuration.");
+
+        var user = config["Email:Username"] ?? throw new Exception("Missing Email:Username");
+        var pass = config["Email:Password"] ?? throw new Exception("Missing Email:Password");
+
+        return new SmtpClientWrapper(host, port, user, pass);
+    };
+});
+
+// ==========================
+// Service Registrations
+// ==========================
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<ReviewService>();
@@ -81,7 +112,9 @@ builder.Services.AddScoped<ICloudinaryWrapper, CloudinaryWrapper>();
 builder.Services.AddScoped<CloudinaryImageService>();
 builder.Services.AddScoped<IStripeSessionService, StripeSessionService>();
 
-// Repositories
+// ==========================
+// Repository Registrations
+// ==========================
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
@@ -89,7 +122,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
-// Enable CORS
+// ==========================
+// CORS Configuration
+// ==========================
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -100,7 +135,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Swagger
+// ==========================
+// Swagger Configuration
+// ==========================
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -126,19 +163,22 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            Array.Empty<string>()
         }
     });
 });
 
+// ==========================
+// Build App
+// ==========================
 var app = builder.Build();
 
-// Stripe config (optional if you're using it)
+// Stripe
 var stripeKey = builder.Configuration["Stripe:SecretKey"];
 if (!string.IsNullOrEmpty(stripeKey))
     Stripe.StripeConfiguration.ApiKey = stripeKey;
 
-// Enable middleware
+// Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

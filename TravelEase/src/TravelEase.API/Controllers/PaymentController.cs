@@ -4,7 +4,7 @@ using TravelEase.TravelEase.API.Models;
 using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.API.Controllers;
+namespace TravelEase.TravelEase.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

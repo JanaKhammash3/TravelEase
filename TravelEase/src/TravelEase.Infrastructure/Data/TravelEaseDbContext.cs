@@ -17,7 +17,6 @@ public class TravelEaseDbContext : DbContext
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<HotelView> HotelViews { get; set; }
-    public DbSet<CartItem> CartItems { get; set; }
     public DbSet<HotelImage> HotelImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
