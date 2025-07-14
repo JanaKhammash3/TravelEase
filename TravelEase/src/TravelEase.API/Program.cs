@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 // ✅ Set QuestPDF license (Community Edition)
 QuestPDF.Settings.License = LicenseType.Community;
 
-// Add controllers
+// Controllers
 builder.Services.AddControllers();
 
 // ==========================
@@ -73,25 +73,25 @@ builder.Services.AddSingleton(sp =>
 });
 
 // ==========================
-// Email Configuration
+// Email Configuration (Mailtrap Ready)
 // ==========================
-builder.Services.AddScoped<Func<ISmtpClientWrapper>>(sp =>
+builder.Services.AddScoped<ISmtpClientWrapper>(sp =>
 {
-    return () =>
-    {
-        var config = sp.GetRequiredService<IConfiguration>();
-
-        var host = config["Email:Host"] ?? throw new Exception("Missing Email:Host");
-        var portStr = config["Email:Port"] ?? throw new Exception("Missing Email:Port");
-        if (!int.TryParse(portStr, out var port))
-            throw new Exception("Invalid SMTP port in configuration.");
-
-        var user = config["Email:Username"] ?? throw new Exception("Missing Email:Username");
-        var pass = config["Email:Password"] ?? throw new Exception("Missing Email:Password");
-
-        return new SmtpClientWrapper(host, port, user, pass);
-    };
+    var config = sp.GetRequiredService<IConfiguration>();
+    var host = config["Email:SmtpHost"];
+    var port = int.Parse(config["Email:SmtpPort"]);
+    var user = config["Email:Username"];
+    var pass = config["Email:Password"];
+    return new SmtpClientWrapper(host, port, user, pass);
 });
+
+// ✅ Add the factory for ISmtpClientWrapper (fixes the crash)
+builder.Services.AddScoped<Func<ISmtpClientWrapper>>(sp => () =>
+{
+    return sp.GetRequiredService<ISmtpClientWrapper>();
+});
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // ==========================
 // Service Registrations
@@ -103,7 +103,6 @@ builder.Services.AddScoped<RoomService>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAdminHotelService, AdminHotelService>();
 builder.Services.AddScoped<IAdminRoomService, AdminRoomService>();
 builder.Services.AddScoped<IAdminCityService, AdminCityService>();
