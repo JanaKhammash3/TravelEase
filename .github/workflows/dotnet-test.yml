@@ -21,7 +21,7 @@ jobs:
 
       - name: Show working directory and structure
         run: |
-          echo "PWD: $(pwd)"
+          echo "Working directory: $(pwd)"
           ls -R
 
       - name: Clean previous builds
@@ -41,11 +41,10 @@ jobs:
           dotnet test ./TravelEase/src/TravelEase.Tests/TravelEase.Tests.csproj --no-build --configuration Release \
             /p:CollectCoverage=true \
             /p:CoverletOutputFormat=cobertura \
-            /p:CoverletOutput=./TestResults/
+            /p:CoverletOutput=./TravelEase/src/TravelEase.Tests/TestResults/
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: '**/coverage.cobertura.xml'
-
+          path: ./TravelEase/src/TravelEase.Tests/TestResults/coverage.cobertura.xml
