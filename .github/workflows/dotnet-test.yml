@@ -19,6 +19,11 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Show working directory and structure
+        run: |
+          echo "PWD: $(pwd)"
+          ls -R
+
       - name: Clean previous builds
         run: |
           dotnet clean
@@ -26,14 +31,14 @@ jobs:
           find . -type d -name obj -exec rm -rf {} +
 
       - name: Restore dependencies
-        run: dotnet restore ./src/TravelEase.API/TravelEase.API.csproj
+        run: dotnet restore ./TravelEase/src/TravelEase.API/TravelEase.API.csproj
 
       - name: Build API project
-        run: dotnet build ./src/TravelEase.API/TravelEase.API.csproj --no-restore --configuration Release
+        run: dotnet build ./TravelEase/src/TravelEase.API/TravelEase.API.csproj --no-restore --configuration Release
 
       - name: Run tests with coverage
         run: |
-          dotnet test ./src/TravelEase.Tests/TravelEase.Tests.csproj --no-build --configuration Release \
+          dotnet test ./TravelEase/src/TravelEase.Tests/TravelEase.Tests.csproj --no-build --configuration Release \
             /p:CollectCoverage=true \
             /p:CoverletOutputFormat=cobertura \
             /p:CoverletOutput=./TestResults/
