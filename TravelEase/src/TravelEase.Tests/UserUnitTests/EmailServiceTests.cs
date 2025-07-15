@@ -4,6 +4,7 @@ using Moq;
 using Microsoft.Extensions.Configuration;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Infrastructure.Services;
+using Xunit;
 
 namespace TravelEase.TravelEase.Tests.UserUnitTests;
 

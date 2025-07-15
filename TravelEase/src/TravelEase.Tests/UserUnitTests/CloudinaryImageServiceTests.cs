@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet.Actions;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Infrastructure.Services;
+using Xunit;
 
 namespace TravelEase.TravelEase.Tests.UserUnitTests
 {

@@ -5,6 +5,7 @@ using System.Text;
 using TravelEase.TravelEase.API.Controllers;
 using TravelEase.TravelEase.API.Models;
 using TravelEase.TravelEase.Application.Interfaces;
+using Xunit;
 
 
 namespace TravelEase.TravelEase.Tests.UserUnitTests;

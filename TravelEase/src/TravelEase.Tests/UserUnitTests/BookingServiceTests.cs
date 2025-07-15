@@ -1,6 +1,7 @@
 ﻿using Moq;
 using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Interfaces;
+using Xunit;
 
 namespace TravelEase.TravelEase.Tests.UserUnitTests;
 
