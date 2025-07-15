@@ -14,10 +14,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET SDK
+      - name: Setup .NET 9 Preview SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '9.0.100-preview.4.24267.6'
 
       - name: Restore dependencies
         run: dotnet restore
@@ -27,7 +27,10 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          dotnet test --no-build --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/
+          dotnet test --no-build --configuration Release \
+            /p:CollectCoverage=true \
+            /p:CoverletOutputFormat=cobertura \
+            /p:CoverletOutput=./TestResults/
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
