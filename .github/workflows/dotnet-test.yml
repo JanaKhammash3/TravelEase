@@ -19,11 +19,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: List SDKs and runtimes
-        run: |
-          dotnet --list-sdks
-          dotnet --list-runtimes
-
       - name: Clean previous builds
         run: |
           dotnet clean
@@ -31,10 +26,7 @@ jobs:
           find . -type d -name obj -exec rm -rf {} +
 
       - name: Restore dependencies
-        run: dotnet restore
-
-      - name: List all .csproj files
-        run: find . -name "*.csproj"
+        run: dotnet restore ./src/TravelEase.API/TravelEase.API.csproj
 
       - name: Build API project
         run: dotnet build ./src/TravelEase.API/TravelEase.API.csproj --no-restore --configuration Release
