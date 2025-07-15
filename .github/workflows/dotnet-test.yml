@@ -19,6 +19,18 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Show .NET SDKs
+        run: dotnet --list-sdks
+
+      - name: Show .NET Runtimes
+        run: dotnet --list-runtimes
+
+      - name: Clean previous builds
+        run: |
+          dotnet clean
+          find . -type d -name bin -exec rm -rf {} +
+          find . -type d -name obj -exec rm -rf {} +
+
       - name: Restore dependencies
         run: dotnet restore
 
