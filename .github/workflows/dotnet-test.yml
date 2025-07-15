@@ -37,4 +37,7 @@ jobs:
         run: dotnet build ./TravelEase/src/TravelEase.API/TravelEase.API.csproj --no-restore --configuration Release
 
       - name: Run unit tests
-        run: dotnet test ./TravelEase/src/TravelEase.Tests/TravelEase.Tests.csproj --no-build --configuration Release --verbosity normal
+        run: |
+          dotnet test ./TravelEase/src/TravelEase.Tests/TravelEase.Tests.csproj \
+            --no-build --configuration Release \
+            --logger "console;verbosity=detailed"
