@@ -34,4 +34,9 @@
     <ProjectReference Include="..\TravelEase.Infrastructure\TravelEase.Infrastructure.csproj" />
   </ItemGroup>
 
+  <!-- ✅ This fixes IConfiguration and IFormFile issues -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
 </Project>
