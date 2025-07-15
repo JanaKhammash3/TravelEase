@@ -19,12 +19,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Show working directory and structure
-        run: |
-          echo "Working directory: $(pwd)"
-          ls -R
-
-      - name: Clean previous builds
+      - name: Clean build artifacts
         run: |
           dotnet clean
           find . -type d -name bin -exec rm -rf {} +
@@ -33,11 +28,18 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ./TravelEase/src/TravelEase.API/TravelEase.API.csproj
 
-      - name: Build solution
+      - name: Build project
         run: dotnet build ./TravelEase/src/TravelEase.API/TravelEase.API.csproj --no-restore --configuration Release
 
       - name: Run unit tests
         run: |
           dotnet test ./TravelEase/src/TravelEase.Tests/TravelEase.Tests.csproj \
-            --no-build --configuration Release \
-            --logger "console;verbosity=detailed"
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=test_results.trx"
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/test_results.trx'
