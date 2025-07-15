@@ -1,4 +1,4 @@
-name: Run .NET Tests with Coverage
+name: Run .NET Tests
 
 on:
   push:
@@ -36,15 +36,5 @@ jobs:
       - name: Build API project
         run: dotnet build ./TravelEase/src/TravelEase.API/TravelEase.API.csproj --no-restore --configuration Release
 
-      - name: Run tests with coverage
-        run: |
-          dotnet test ./TravelEase/src/TravelEase.Tests/TravelEase.Tests.csproj --no-build --configuration Release \
-            /p:CollectCoverage=true \
-            /p:CoverletOutputFormat=cobertura \
-            /p:CoverletOutput=./TravelEase/src/TravelEase.Tests/TestResults/
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: ./TravelEase/src/TravelEase.Tests/TestResults/coverage.cobertura.xml
+      - name: Run tests
+        run: dotnet test ./TravelEase/src/TravelEase.Tests/TravelEase.Tests.csproj --no-build --configuration Release
