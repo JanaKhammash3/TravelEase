@@ -1,6 +1,6 @@
-# 🏨 TravelEase – Hotel Booking Backend API
+# TravelEase – Hotel Booking Backend API
 
-A backend **RESTful API** for a hotel booking system, built with **C#**, **ASP.NET Core**, and **Entity Framework Core**. It supports user authentication, hotel and room search, secure bookings, and full admin management. Features secure JWT authentication, role-based access control, and full unit testing.
+A backend **RESTful API** for a hotel booking system, built with **C#**, **ASP.NET Core**, and **Entity Framework Core**. It supports user authentication, hotel and room search, secure bookings, image uploads, Stripe payments, and admin management. Features secure JWT authentication, role-based access control, third-party integrations, and full unit testing.
 
 ---
 
@@ -11,51 +11,70 @@ A backend **RESTful API** for a hotel booking system, built with **C#**, **ASP.N
 - **ORM:** Entity Framework Core  
 - **Database:** SQL Server  
 - **Authentication:** JWT (JSON Web Token)  
-- **Testing:** xUnit / MSTest
+- **Testing:** xUnit / Moq  
+- **CI/CD:** GitHub Actions  
+- **Email:** Mailtrap SMTP  
+- **Image Hosting:** Cloudinary  
+- **Payment Gateway:** Stripe
 
 ---
 
 ## ✨ Features
 
 ### 👤 User
-- Register and login
+- Register and login securely
 - Search cities and hotels
-- Filter by date, price, stars, and amenities
-- View hotel details, rooms, and gallery
-- Book rooms securely and receive email confirmation
+- Filter by date, price, star rating, and amenities
+- View hotel details with rooms and gallery
+- Book rooms securely with email confirmation
+- Pay using integrated Stripe API
 
 ### 🛠️ Admin
-- Manage Cities (CRUD)
-- Manage Hotels (CRUD + assign city)
-- Manage Rooms (CRUD + availability & capacity)
-- Admin dashboard with search & filters
+- Manage Cities (Add, Edit, Delete)
+- Manage Hotels (CRUD + city assignment)
+- Manage Rooms (CRUD + capacity & availability)
+- Upload hotel and room images to Cloudinary
+- Dashboard to manage bookings and data
 
 ---
 
-## 🔒 Security
+## 🔐 Security
 
-- JWT authentication
-- Role-based access control (Admin/User)
-- Input validation & exception handling
-- Logging for errors and system monitoring
+- Secure JWT Authentication
+- Role-based access control (User / Admin)
+- Input validation and exception handling
+- Logging for errors and activity monitoring
+
+---
+
+## 🌐 API Integrations
+
+| Feature     | Integration     | Purpose                                 |
+|-------------|------------------|------------------------------------------|
+| 📧 Email    | Mailtrap SMTP     | Send booking confirmation to users       |
+| 🖼️ Image    | Cloudinary         | Upload and serve hotel/room images       |
+| 💳 Payment  | Stripe            | Secure card payment processing           |
 
 ---
 
 ## 🧪 Unit Testing
 
-Includes unit test coverage for:
-- HotelService
-- BookingService
-- RoomService
-- Admin CRUD Services
-  
+Test coverage for:
+- `HotelService`
+- `BookingService`
+- `RoomService`
+- `Admin Services`
+
+Tests written using **xUnit** and **Moq**, run via **GitHub Actions**.
+
 ---
 
 ## 📁 Project Structure
+
 ```bash
 TravelEase/
-├── API/                # Controllers & Startup config
-├── Application/        # DTOs, Interfaces, Services
-├── Domain/             # Entity models
-├── Infrastructure/     # EF DbContext, Repositories
-├── Tests/              # Unit Tests
+├── API/                # Controllers, Program.cs, JWT setup
+├── Application/        # DTOs, Interfaces, Business Logic
+├── Domain/             # Entity Models (Hotel, Room, Booking, User)
+├── Infrastructure/     # DbContext, Repositories, Email, Cloudinary
+├── Tests/              # Unit Tests (xUnit + Moq)
