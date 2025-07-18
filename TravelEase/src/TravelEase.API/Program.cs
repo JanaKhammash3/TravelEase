@@ -18,12 +18,29 @@ using TravelEase.TravelEase.Infrastructure.Repositories;
 using TravelEase.TravelEase.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
+});
+
+// ✅ Logging environment
+Console.WriteLine($"🌍 ENV: {builder.Environment.EnvironmentName}");
+
+// ✅ Config loading (supports Docker)
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 // ✅ Set QuestPDF license (Community Edition)
 QuestPDF.Settings.License = LicenseType.Community;
 
-// Controllers
+// ==========================
+// Add Services
+// ==========================
 builder.Services.AddControllers();
 
 // ==========================
@@ -54,13 +71,13 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // ==========================
-// Database Configuration
+// Database
 // ==========================
 builder.Services.AddDbContext<TravelEaseDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ==========================
-// Cloudinary Configuration
+// Cloudinary
 // ==========================
 builder.Services.AddSingleton(sp =>
 {
@@ -74,19 +91,18 @@ builder.Services.AddSingleton(sp =>
 });
 
 // ==========================
-// Email Configuration (Mailtrap Ready)
+// Mailtrap Email Service
 // ==========================
 builder.Services.AddScoped<ISmtpClientWrapper>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
-    var host = config["Email:SmtpHost"];
-    var port = int.Parse(config["Email:SmtpPort"]);
-    var user = config["Email:Username"];
-    var pass = config["Email:Password"];
-    return new SmtpClientWrapper(host, port, user, pass);
+    return new SmtpClientWrapper(
+        config["Email:SmtpHost"],
+        int.Parse(config["Email:SmtpPort"]),
+        config["Email:Username"],
+        config["Email:Password"]);
 });
 
-// ✅ Add the factory for ISmtpClientWrapper (fixes the crash)
 builder.Services.AddScoped<Func<ISmtpClientWrapper>>(sp => () =>
 {
     return sp.GetRequiredService<ISmtpClientWrapper>();
@@ -95,7 +111,7 @@ builder.Services.AddScoped<Func<ISmtpClientWrapper>>(sp => () =>
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 // ==========================
-// Service Registrations
+// App Services
 // ==========================
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHotelService, HotelService>();
@@ -113,7 +129,7 @@ builder.Services.AddScoped<CloudinaryImageService>();
 builder.Services.AddScoped<IStripeSessionService, StripeSessionService>();
 
 // ==========================
-// Repository Registrations
+// Repositories
 // ==========================
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
@@ -123,20 +139,7 @@ builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 // ==========================
-// CORS Configuration
-// ==========================
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
-// ==========================
-// Swagger Configuration
+// Swagger
 // ==========================
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -145,7 +148,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+        Description = "JWT Bearer (Authorization: Bearer {token})",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -163,23 +166,36 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            new string[] {}
         }
     });
 });
 
 // ==========================
-// Build App
+// CORS
+// ==========================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
+
+// ==========================
+// App Build
 // ==========================
 var app = builder.Build();
 
-// Stripe
+// Stripe Setup
 var stripeKey = builder.Configuration["Stripe:SecretKey"];
 if (!string.IsNullOrEmpty(stripeKey))
     Stripe.StripeConfiguration.ApiKey = stripeKey;
 
-// Middleware
-if (app.Environment.IsDevelopment())
+// ==========================
+// Middleware Pipeline
+// ==========================
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
