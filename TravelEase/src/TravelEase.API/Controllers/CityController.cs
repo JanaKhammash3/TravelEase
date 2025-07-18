@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TravelEase.TravelEase.Application.Features.City;
+using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.TravelEase.API.Controllers
 {
@@ -7,9 +8,9 @@ namespace TravelEase.TravelEase.API.Controllers
     [Route("api/[controller]")]
     public class CityController : ControllerBase
     {
-        private readonly CityService _cityService;
+        private readonly ICityService _cityService;
 
-        public CityController(CityService cityService)
+        public CityController(ICityService cityService)
         {
             _cityService = cityService;
         }
@@ -34,7 +35,7 @@ namespace TravelEase.TravelEase.API.Controllers
             await _cityService.DeleteCityAsync(id);
             return Ok(new { message = "City deleted successfully" });
         }
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCityCommand command)
         {
@@ -42,12 +43,12 @@ namespace TravelEase.TravelEase.API.Controllers
             await _cityService.UpdateCityAsync(command);
             return Ok(new { message = "City updated successfully" });
         }
+
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string keyword, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             var result = await _cityService.SearchCitiesAsync(keyword, page, pageSize);
             return Ok(result);
         }
-
     }
 }

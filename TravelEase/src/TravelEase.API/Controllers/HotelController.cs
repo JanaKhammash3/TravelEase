@@ -5,6 +5,7 @@ using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using TravelEase.TravelEase.API.Models;
+using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Infrastructure.Services;
 
 namespace TravelEase.TravelEase.API.Controllers
@@ -26,23 +27,34 @@ namespace TravelEase.TravelEase.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllHotels()
         {
-            var hotels = await _hotelService.GetAllHotelsAsync();
+            List<HotelDto> hotels = await _hotelService.GetAllHotelsAsync();
             return Ok(hotels);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHotelById(int id)
         {
-            var hotel = await _hotelService.GetHotelByIdAsync(id);
+            var hotel = await _hotelService.GetHotelDtoByIdAsync(id);
             return hotel == null ? NotFound() : Ok(hotel);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateHotel([FromBody] CreateHotelCommand cmd)
         {
-            await _hotelService.CreateHotelAsync(cmd);
-            return Ok(new { message = "Hotel created successfully." });
+            try
+            {
+                await _hotelService.CreateHotelAsync(cmd);
+                return Ok(new { message = "Hotel created successfully." });
+            }
+            catch (Exception ex)
+            {
+                var inner = ex.InnerException?.Message ?? ex.Message;
+                return StatusCode(500, new { error = inner });
+            }
         }
+        
 
         [HttpPut]
         public async Task<IActionResult> UpdateHotel([FromBody] UpdateHotelCommand cmd)
@@ -129,7 +141,7 @@ namespace TravelEase.TravelEase.API.Controllers
         [HttpGet("{id}/nearby")]
         public async Task<IActionResult> GetNearbyAttractions(int id)
         {
-            var hotel = await _hotelService.GetHotelByIdAsync(id);
+            var hotel = await _hotelService.GetHotelDtoByIdAsync(id);
             if (hotel == null)
                 return NotFound("Hotel not found.");
 
@@ -148,6 +160,18 @@ namespace TravelEase.TravelEase.API.Controllers
             });
         }
 
+
+        [HttpGet("{id}/available-rooms")]
+        public IActionResult GetAvailableRooms(
+            int id,
+            [FromQuery] DateTime checkIn,
+            [FromQuery] DateTime checkOut,
+            [FromQuery] int adults,
+            [FromQuery] int children)
+        {
+            var rooms = _hotelRepository.GetAvailableRoomsForHotel(id, checkIn, checkOut, adults, children);
+            return Ok(rooms);
+        }
 
 
 

@@ -87,7 +87,7 @@ public class HotelServiceTests
         var hotel = new Hotel { Id = 5 };
         _hotelRepoMock.Setup(r => r.GetByIdAsync(5)).ReturnsAsync(hotel);
 
-        var result = await _service.GetHotelByIdAsync(5);
+        var result = await _service.GetHotelDtoByIdAsync(5);
 
         Assert.NotNull(result);
     }
@@ -148,9 +148,10 @@ public class HotelServiceTests
     [Fact(DisplayName = "✅ Upload hotel images")]
     public async Task UploadImagesAsync_ShouldSaveFilesAndReturnUrls()
     {
-        var hotel = new Hotel { Id = 1, ImageUrls = new List<string>() };
+        // Arrange
+        var hotel = new Hotel { Id = 1, Images = new List<HotelImage>() };
         _hotelRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(hotel);
-        _hotelRepoMock.Setup(r => r.UpdateAsync(hotel)).Returns(Task.CompletedTask);
+        _hotelRepoMock.Setup(r => r.SaveHotelImageUrlsAsync(1, It.IsAny<List<string>>())).Returns(Task.CompletedTask);
 
         var mockStream = new MemoryStream(new byte[] { 0x1, 0x2, 0x3 });
         var files = new List<(string FileName, Stream Content)>
@@ -158,11 +159,14 @@ public class HotelServiceTests
             ("test.jpg", mockStream)
         };
 
+        // Act
         var result = await _service.UploadImagesAsync(1, files);
 
+        // Assert
         Assert.Single(result);
-        _hotelRepoMock.Verify(r => r.UpdateAsync(hotel), Times.Once);
+        _hotelRepoMock.Verify(r => r.SaveHotelImageUrlsAsync(1, It.IsAny<List<string>>()), Times.Once);
     }
+
 
     [Fact(DisplayName = "❌ Upload hotel images throws if hotel not found")]
     public async Task UploadImagesAsync_ShouldThrowIfHotelNotFound()

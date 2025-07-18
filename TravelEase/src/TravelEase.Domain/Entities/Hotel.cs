@@ -18,7 +18,6 @@
         public List<Room> Rooms { get; set; } = new();
         public List<Review> Reviews { get; set; } = new();
         public double AverageRating => Reviews.Any() ? Reviews.Average(r => r.Rating) : 0.0;
-        public List<string> ImageUrls { get; set; } = new();
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public ICollection<HotelImage> Images { get; set; } = new List<HotelImage>();

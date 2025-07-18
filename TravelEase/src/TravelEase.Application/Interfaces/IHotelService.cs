@@ -2,19 +2,20 @@
 using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.TravelEase.Application.Interfaces
-{
-    public interface IHotelService
-    {
-        Task<List<HotelDto>> SearchHotelsAsync(SearchHotelsQuery query);
-        Task<List<Hotel>> GetAllHotelsAsync();
-        Task<Hotel?> GetHotelByIdAsync(int id);
-        Task CreateHotelAsync(CreateHotelCommand cmd);
-        Task UpdateHotelAsync(UpdateHotelCommand cmd);
-        Task DeleteHotelAsync(int id);
-        Task<List<Hotel>> GetFeaturedHotelsAsync();
-        Task<List<string>> UploadImagesAsync(int hotelId, List<(string FileName, Stream Content)> files);
-        Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls);
+namespace TravelEase.TravelEase.Application.Interfaces;
 
-    }
+public interface IHotelService
+{
+    Task<List<HotelDto>> GetAllHotelsAsync();
+    Task<HotelDto?> GetHotelDtoByIdAsync(int id);
+    Task CreateHotelAsync(CreateHotelCommand cmd);
+    Task UpdateHotelAsync(UpdateHotelCommand cmd);
+    Task DeleteHotelAsync(int id);
+    Task<List<HotelDto>> SearchHotelsAsync(SearchHotelsQuery query);
+    Task<List<HotelDto>> GetFeaturedHotelsAsync();
+    Task<List<HotelDto>> GetRecentlyVisitedHotelsAsync(int userId, int count = 5);
+    Task<List<TrendingCityDto>> GetTrendingCitiesAsync(int count = 5);
+    Task RecordHotelViewAsync(int userId, int hotelId);
+    Task<List<string>> UploadImagesAsync(int hotelId, List<(string FileName, Stream Content)> files);
+    Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls);
 }

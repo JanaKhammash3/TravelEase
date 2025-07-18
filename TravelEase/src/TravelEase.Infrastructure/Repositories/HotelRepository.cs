@@ -21,8 +21,11 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             return await _context.Hotels
                 .Include(h => h.City)
                 .Include(h => h.Rooms)
+                .Include(h => h.Images) 
                 .ToListAsync();
         }
+
+
 
         public async Task<Hotel?> GetByIdAsync(int id)
         {
