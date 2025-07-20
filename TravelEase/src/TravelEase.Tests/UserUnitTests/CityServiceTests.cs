@@ -67,7 +67,7 @@ public class CityServiceTests
     [Fact(DisplayName = "✅ Delete city when not found — should do nothing")]
     public async Task DeleteCityAsync_ShouldDoNothing_WhenNotFound()
     {
-        _cityRepoMock.Setup(r => r.GetByIdAsync(99)).ReturnsAsync((City)null);
+        _cityRepoMock.Setup(r => r.GetByIdAsync(99)).ReturnsAsync((City)null!);
 
         await _service.DeleteCityAsync(99);
 
@@ -114,7 +114,7 @@ public class CityServiceTests
             PostOffice = "00000"
         };
 
-        _cityRepoMock.Setup(r => r.GetByIdAsync(100)).ReturnsAsync((City)null);
+        _cityRepoMock.Setup(r => r.GetByIdAsync(100)).ReturnsAsync((City)null!);
 
         var ex = await Assert.ThrowsAsync<Exception>(() => _service.UpdateCityAsync(updateCmd));
         Assert.Equal("City not found", ex.Message);

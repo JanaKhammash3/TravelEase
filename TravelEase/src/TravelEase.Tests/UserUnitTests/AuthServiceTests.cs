@@ -127,7 +127,7 @@ public class AuthServiceTests
             Password = "irrelevant"
         };
 
-        _userRepoMock.Setup(r => r.GetByEmailAsync(command.Email)).ReturnsAsync((User)null);
+        _userRepoMock.Setup(r => r.GetByEmailAsync(command.Email)).ReturnsAsync((User)null!);
 
         var ex = await Assert.ThrowsAsync<Exception>(() => _authService.LoginAsync(command));
         Assert.Equal("Invalid credentials", ex.Message);
