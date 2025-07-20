@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TravelEase.TravelEase.Application.DTOs.Admin;
-using TravelEase.TravelEase.Application.Interfaces.Admin;
 
-namespace TravelEase.TravelEase.API.Controllers.Admin;
+namespace TravelEase.TravelEase.API.Controllers.AdminControllers;
 
 [ApiController]
 [Route("api/admin/hotels")]
+[Authorize(Roles = "Admin")]
 public class AdminHotelController : ControllerBase
 {
     private readonly IAdminHotelService _service;
@@ -15,8 +16,15 @@ public class AdminHotelController : ControllerBase
         _service = service;
     }
 
+    // ✅ GET with optional filters
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+    public async Task<IActionResult> GetAll(
+        [FromQuery] string? name,
+        [FromQuery] string? city,
+        [FromQuery] int? minStars)
+    {
+        return Ok(await _service.GetAllAsync(name, city, minStars));
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id) => Ok(await _service.GetByIdAsync(id));
@@ -29,10 +37,4 @@ public class AdminHotelController : ControllerBase
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) => Ok(await _service.DeleteAsync(id));
-    
-    [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? name, [FromQuery] string? city, [FromQuery] int? minStars)
-        => Ok(await _service.GetAllAsync(name, city, minStars));
-
-
 }

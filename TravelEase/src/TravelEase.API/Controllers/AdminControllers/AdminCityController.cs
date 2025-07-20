@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TravelEase.TravelEase.Application.DTOs.Admin;
 using TravelEase.TravelEase.Application.Interfaces.Admin;
+// 👈 Add this
+
+namespace TravelEase.TravelEase.API.Controllers.AdminControllers;
 
 [ApiController]
 [Route("api/admin/cities")]
+[Authorize(Roles = "Admin")] 
 public class AdminCityController : ControllerBase {
     private readonly IAdminCityService _service;
 
