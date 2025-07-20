@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Domain.Entities;
@@ -15,20 +16,86 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Booking>> GetAllAsync()
+        public async Task<List<BookingDto>> GetAllAsync()
         {
             return await _context.Bookings
+                .Include(b => b.User)
                 .Include(b => b.Room)
                 .ThenInclude(r => r.Hotel)
-                .Include(b => b.User)
+                .Select(b => new BookingDto
+                {
+                    Id = b.Id,
+                    UserEmail = b.User.Email,
+                    HotelName = b.Room.Hotel.Name,
+                    RoomNumber = b.Room.Number,
+                    CheckIn = b.CheckIn,
+                    CheckOut = b.CheckOut,
+                    TotalPrice = b.TotalPrice,
+                    PaymentStatus = b.PaymentStatus
+                })
                 .ToListAsync();
         }
 
-        public async Task<Booking?> GetByIdAsync(int id)
+        public async Task<BookingDto?> GetByIdAsync(int id)
+        {
+            return await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .ThenInclude(r => r.Hotel)
+                .Where(b => b.Id == id)
+                .Select(b => new BookingDto
+                {
+                    Id = b.Id,
+                    UserEmail = b.User.Email,
+                    HotelName = b.Room.Hotel.Name,
+                    RoomNumber = b.Room.Number,
+                    CheckIn = b.CheckIn,
+                    CheckOut = b.CheckOut,
+                    TotalPrice = b.TotalPrice,
+                    PaymentStatus = b.PaymentStatus
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<BookingDto>> SearchAsync(SearchBookingsQuery query)
+        {
+            var bookings = _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .ThenInclude(r => r.Hotel)
+                .AsQueryable();
+
+            if (query.UserId.HasValue)
+                bookings = bookings.Where(b => b.UserId == query.UserId.Value);
+
+            if (query.RoomId.HasValue)
+                bookings = bookings.Where(b => b.RoomId == query.RoomId.Value);
+
+            if (query.FromDate.HasValue)
+                bookings = bookings.Where(b => b.CheckIn >= query.FromDate.Value);
+
+            if (query.ToDate.HasValue)
+                bookings = bookings.Where(b => b.CheckOut <= query.ToDate.Value);
+
+            return await bookings
+                .Select(b => new BookingDto
+                {
+                    Id = b.Id,
+                    UserEmail = b.User.Email,
+                    HotelName = b.Room.Hotel.Name,
+                    RoomNumber = b.Room.Number,
+                    CheckIn = b.CheckIn,
+                    CheckOut = b.CheckOut,
+                    TotalPrice = b.TotalPrice,
+                    PaymentStatus = b.PaymentStatus
+                })
+                .ToListAsync();
+        }
+
+        public async Task<Booking?> GetBookingEntityByIdAsync(int id)
         {
             return await _context.Bookings
                 .Include(b => b.Room)
-                .ThenInclude(r => r.Hotel)
                 .Include(b => b.User)
                 .FirstOrDefaultAsync(b => b.Id == id);
         }
@@ -60,29 +127,6 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
                     (checkOut > b.CheckIn && checkOut <= b.CheckOut) ||
                     (checkIn <= b.CheckIn && checkOut >= b.CheckOut)
                 ));
-        }
-
-        public async Task<List<Booking>> SearchBookingsAsync(SearchBookingsQuery query)
-        {
-            var bookings = _context.Bookings
-                .Include(b => b.User)
-                .Include(b => b.Room)
-                .ThenInclude(r => r.Hotel)
-                .AsQueryable();
-
-            if (query.UserId.HasValue)
-                bookings = bookings.Where(b => b.UserId == query.UserId.Value);
-
-            if (query.RoomId.HasValue)
-                bookings = bookings.Where(b => b.RoomId == query.RoomId.Value);
-
-            if (query.FromDate.HasValue)
-                bookings = bookings.Where(b => b.CheckIn >= query.FromDate.Value);
-
-            if (query.ToDate.HasValue)
-                bookings = bookings.Where(b => b.CheckOut <= query.ToDate.Value);
-
-            return await bookings.ToListAsync();
         }
     }
 }

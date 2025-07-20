@@ -1,6 +1,8 @@
 ﻿using Moq;
+using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Entities;
 using Xunit;
 
 namespace TravelEase.TravelEase.Tests.UserUnitTests;
@@ -19,7 +21,6 @@ public class BookingServiceTests
     [Fact(DisplayName = "✅ Create booking when room is available")]
     public async Task CreateAsync_ShouldCreateBooking_WhenRoomIsAvailable()
     {
-        // Arrange
         var command = new CreateBookingCommand
         {
             UserId = 1,
@@ -36,10 +37,8 @@ public class BookingServiceTests
 
         _bookingRepoMock.Setup(r => r.AddAsync(It.IsAny<Booking>())).Returns(Task.CompletedTask);
 
-        // Act
         await _service.CreateAsync(command);
 
-        // Assert
         _bookingRepoMock.Verify(r => r.AddAsync(It.IsAny<Booking>()), Times.Once);
     }
 
@@ -66,10 +65,10 @@ public class BookingServiceTests
     [Fact(DisplayName = "✅ Get all bookings")]
     public async Task GetAllAsync_ShouldReturnBookings()
     {
-        var bookings = new List<Booking>
+        var bookings = new List<BookingDto>
         {
-            new() { Id = 1, RoomId = 10 },
-            new() { Id = 2, RoomId = 20 }
+            new() { Id = 1, RoomNumber = "101" },
+            new() { Id = 2, RoomNumber = "102" }
         };
 
         _bookingRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(bookings);
@@ -77,25 +76,27 @@ public class BookingServiceTests
         var result = await _service.GetAllAsync();
 
         Assert.Equal(2, result.Count);
+        Assert.All(result, b => Assert.IsType<BookingDto>(b));
     }
 
     [Fact(DisplayName = "✅ Get booking by ID")]
     public async Task GetByIdAsync_ShouldReturnBooking_WhenExists()
     {
-        var booking = new Booking { Id = 5, RoomId = 12 };
-        _bookingRepoMock.Setup(r => r.GetByIdAsync(5)).ReturnsAsync(booking);
+        var bookingDto = new BookingDto { Id = 5, RoomNumber = "203" };
+
+        _bookingRepoMock.Setup(r => r.GetByIdAsync(5)).ReturnsAsync(bookingDto);
 
         var result = await _service.GetByIdAsync(5);
 
         Assert.NotNull(result);
-        Assert.Equal(12, result.RoomId);
+        Assert.Equal("203", result.RoomNumber);
     }
 
     [Fact(DisplayName = "✅ Delete booking if exists")]
     public async Task DeleteAsync_ShouldCallRepo_WhenBookingExists()
     {
         var booking = new Booking { Id = 3 };
-        _bookingRepoMock.Setup(r => r.GetByIdAsync(3)).ReturnsAsync(booking);
+        _bookingRepoMock.Setup(r => r.GetBookingEntityByIdAsync(3)).ReturnsAsync(booking);
 
         await _service.DeleteAsync(3);
 
@@ -105,7 +106,7 @@ public class BookingServiceTests
     [Fact(DisplayName = "✅ Delete booking when not found should do nothing")]
     public async Task DeleteAsync_ShouldNotFail_WhenBookingDoesNotExist()
     {
-        _bookingRepoMock.Setup(r => r.GetByIdAsync(99)).ReturnsAsync((Booking)null);
+        _bookingRepoMock.Setup(r => r.GetBookingEntityByIdAsync(99)).ReturnsAsync((Booking)null);
 
         await _service.DeleteAsync(99);
 
@@ -135,7 +136,7 @@ public class BookingServiceTests
             Children = 0
         };
 
-        _bookingRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(existing);
+        _bookingRepoMock.Setup(r => r.GetBookingEntityByIdAsync(1)).ReturnsAsync(existing);
         _bookingRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Booking>())).Returns(Task.CompletedTask);
 
         await _service.UpdateAsync(updateCmd);
@@ -143,6 +144,8 @@ public class BookingServiceTests
         Assert.Equal(updateCmd.CheckIn, existing.CheckIn);
         Assert.Equal(updateCmd.CheckOut, existing.CheckOut);
         Assert.Equal(updateCmd.SpecialRequests, existing.SpecialRequests);
+        Assert.Equal(updateCmd.Adults, existing.Adults);
+        Assert.Equal(updateCmd.Children, existing.Children);
     }
 
     [Fact(DisplayName = "✅ Update booking when not found should do nothing")]
@@ -158,7 +161,7 @@ public class BookingServiceTests
             Children = 1
         };
 
-        _bookingRepoMock.Setup(r => r.GetByIdAsync(123)).ReturnsAsync((Booking)null);
+        _bookingRepoMock.Setup(r => r.GetBookingEntityByIdAsync(123)).ReturnsAsync((Booking)null);
 
         await _service.UpdateAsync(updateCmd);
 
@@ -170,13 +173,13 @@ public class BookingServiceTests
     {
         var query = new SearchBookingsQuery { UserId = 1 };
 
-        var data = new List<Booking> { new() { Id = 1, UserId = 1 } };
+        var data = new List<BookingDto> { new() { Id = 1, UserEmail = "test@example.com" } };
 
-        _bookingRepoMock.Setup(r => r.SearchBookingsAsync(query)).ReturnsAsync(data);
+        _bookingRepoMock.Setup(r => r.SearchAsync(query)).ReturnsAsync(data);
 
         var result = await _service.SearchBookingsAsync(query);
 
         Assert.Single(result);
+        Assert.Equal("test@example.com", result[0].UserEmail);
     }
-    
 }

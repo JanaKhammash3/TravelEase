@@ -174,9 +174,12 @@ public class BookingController : ControllerBase
         }
     }
 
-    // ✅ Existing endpoints stay unchanged
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _bookingService.GetAllAsync());
+    public async Task<IActionResult> GetAll()
+    {
+        var bookings = await _bookingService.GetAllAsync();
+        return Ok(bookings);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)

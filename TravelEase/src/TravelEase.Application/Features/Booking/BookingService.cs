@@ -1,4 +1,5 @@
-﻿using TravelEase.TravelEase.Application.Features.Booking;
+﻿using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Domain.Entities;
 
@@ -13,14 +14,19 @@ namespace TravelEase.TravelEase.Application.Features.Booking
             _bookingRepository = bookingRepository;
         }
 
-        public async Task<List<global::Booking>> GetAllAsync()
+        public async Task<List<BookingDto>> GetAllAsync()
         {
             return await _bookingRepository.GetAllAsync();
         }
 
-        public async Task<global::Booking?> GetByIdAsync(int id)
+        public async Task<BookingDto?> GetByIdAsync(int id)
         {
             return await _bookingRepository.GetByIdAsync(id);
+        }
+
+        public async Task<List<BookingDto>> SearchBookingsAsync(SearchBookingsQuery query)
+        {
+            return await _bookingRepository.SearchAsync(query);
         }
 
         public async Task CreateAsync(CreateBookingCommand cmd)
@@ -38,8 +44,8 @@ namespace TravelEase.TravelEase.Application.Features.Booking
                 Adults = cmd.Adults,
                 Children = cmd.Children,
                 SpecialRequests = cmd.SpecialRequests,
-                PaymentStatus = "Pending", // can be overridden at checkout
-                TotalPrice = 0 // will be set at checkout time
+                PaymentStatus = "Pending",
+                TotalPrice = 0
             };
 
             await _bookingRepository.AddAsync(booking);
@@ -47,14 +53,14 @@ namespace TravelEase.TravelEase.Application.Features.Booking
 
         public async Task DeleteAsync(int id)
         {
-            var booking = await _bookingRepository.GetByIdAsync(id);
+            var booking = await _bookingRepository.GetBookingEntityByIdAsync(id);
             if (booking != null)
                 await _bookingRepository.DeleteAsync(booking);
         }
 
         public async Task UpdateAsync(UpdateBookingCommand cmd)
         {
-            var booking = await _bookingRepository.GetByIdAsync(cmd.Id);
+            var booking = await _bookingRepository.GetBookingEntityByIdAsync(cmd.Id);
             if (booking == null) return;
 
             booking.CheckIn = cmd.CheckIn;
@@ -64,11 +70,6 @@ namespace TravelEase.TravelEase.Application.Features.Booking
             booking.Children = cmd.Children;
 
             await _bookingRepository.UpdateAsync(booking);
-        }
-
-        public async Task<List<global::Booking>> SearchBookingsAsync(SearchBookingsQuery query)
-        {
-            return await _bookingRepository.SearchBookingsAsync(query);
         }
     }
 }
