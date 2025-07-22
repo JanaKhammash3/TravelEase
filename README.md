@@ -75,6 +75,7 @@ Test coverage includes:
   - `CloudinaryImageService`
   - `EmailService`
   - `PdfReceiptGenerator`
+  - `StripeService` (for Stripe payment integration)
 
 - **And Other Controllers.**
 ---
