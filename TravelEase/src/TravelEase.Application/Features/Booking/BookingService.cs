@@ -31,11 +31,13 @@ namespace TravelEase.TravelEase.Application.Features.Booking
 
         public async Task CreateAsync(CreateBookingCommand cmd)
         {
+            using var transaction = await _bookingRepository.BeginSerializableTransactionAsync();
+
             var isAvailable = await _bookingRepository.IsRoomAvailableAsync(cmd.RoomId, cmd.CheckIn, cmd.CheckOut);
             if (!isAvailable)
-                throw new Exception("❌ Room is not available for the selected dates");
+                throw new Exception(" Room is not available for the selected dates");
 
-            var booking = new global::Booking
+            var booking = new Domain.Entities.Booking
             {
                 UserId = cmd.UserId,
                 RoomId = cmd.RoomId,
@@ -49,7 +51,10 @@ namespace TravelEase.TravelEase.Application.Features.Booking
             };
 
             await _bookingRepository.AddAsync(booking);
+
+            await transaction.CommitAsync();
         }
+
 
         public async Task DeleteAsync(int id)
         {

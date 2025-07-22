@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Interfaces;
@@ -105,6 +106,12 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
         }
+        
+        public async Task<IDbContextTransaction> BeginSerializableTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+        }
+
 
         public async Task UpdateAsync(Booking booking)
         {
@@ -129,4 +136,5 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
                 ));
         }
     }
+    
 }

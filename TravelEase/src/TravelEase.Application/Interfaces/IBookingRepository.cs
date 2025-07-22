@@ -1,4 +1,5 @@
-﻿using TravelEase.TravelEase.Application.DTOs;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Domain.Entities;
 
@@ -14,5 +15,7 @@ namespace TravelEase.TravelEase.Application.Interfaces
         Task UpdateAsync(Booking booking);
         Task DeleteAsync(Booking booking);
         Task<bool> IsRoomAvailableAsync(int roomId, DateTime checkIn, DateTime checkOut);
+        Task<IDbContextTransaction> BeginSerializableTransactionAsync();
+
     }
 }
