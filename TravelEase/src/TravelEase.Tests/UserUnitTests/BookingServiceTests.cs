@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Moq;
 using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Features.Booking;
 using TravelEase.TravelEase.Application.Interfaces;
@@ -33,16 +34,20 @@ public class BookingServiceTests
         };
 
         _bookingRepoMock.Setup(r => r.IsRoomAvailableAsync(command.RoomId, command.CheckIn, command.CheckOut))
-                        .ReturnsAsync(true);
+            .ReturnsAsync(true);
 
-        _bookingRepoMock.Setup(r => r.AddAsync(It.IsAny<Booking>())).Returns(Task.CompletedTask);
+        _bookingRepoMock.Setup(r => r.BeginSerializableTransactionAsync())
+            .ReturnsAsync(Mock.Of<IDbContextTransaction>());
+
+        _bookingRepoMock.Setup(r => r.AddAsync(It.IsAny<Booking>()))
+            .Returns(Task.CompletedTask);
 
         await _service.CreateAsync(command);
 
         _bookingRepoMock.Verify(r => r.AddAsync(It.IsAny<Booking>()), Times.Once);
     }
 
-    [Fact(DisplayName = "❌ Create booking when room is not available should throw")]
+    [Fact(DisplayName = "Create booking when room is not available should throw")]
     public async Task CreateAsync_ShouldThrow_WhenRoomIsNotAvailable()
     {
         var command = new CreateBookingCommand
@@ -56,13 +61,16 @@ public class BookingServiceTests
         };
 
         _bookingRepoMock.Setup(r => r.IsRoomAvailableAsync(command.RoomId, command.CheckIn, command.CheckOut))
-                        .ReturnsAsync(false);
+            .ReturnsAsync(false);
 
         var ex = await Assert.ThrowsAsync<Exception>(() => _service.CreateAsync(command));
-        Assert.Equal("❌ Room is not available for the selected dates", ex.Message);
+
+        Assert.Contains("Room is not available", ex.Message);
     }
 
-    [Fact(DisplayName = "✅ Get all bookings")]
+
+
+    [Fact(DisplayName = " Get all bookings")]
     public async Task GetAllAsync_ShouldReturnBookings()
     {
         var bookings = new List<BookingDto>
@@ -79,7 +87,7 @@ public class BookingServiceTests
         Assert.All(result, b => Assert.IsType<BookingDto>(b));
     }
 
-    [Fact(DisplayName = "✅ Get booking by ID")]
+    [Fact(DisplayName = "Get booking by ID")]
     public async Task GetByIdAsync_ShouldReturnBooking_WhenExists()
     {
         var bookingDto = new BookingDto { Id = 5, RoomNumber = "203" };
@@ -103,7 +111,7 @@ public class BookingServiceTests
         _bookingRepoMock.Verify(r => r.DeleteAsync(booking), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Delete booking when not found should do nothing")]
+    [Fact(DisplayName = " Delete booking when not found should do nothing")]
     public async Task DeleteAsync_ShouldNotFail_WhenBookingDoesNotExist()
     {
         _bookingRepoMock.Setup(r => r.GetBookingEntityByIdAsync(99)).ReturnsAsync((Booking)null);
@@ -113,7 +121,7 @@ public class BookingServiceTests
         _bookingRepoMock.Verify(r => r.DeleteAsync(It.IsAny<Booking>()), Times.Never);
     }
 
-    [Fact(DisplayName = "✅ Update booking when it exists")]
+    [Fact(DisplayName = " Update booking when it exists")]
     public async Task UpdateAsync_ShouldUpdate_WhenBookingExists()
     {
         var existing = new Booking
@@ -148,7 +156,7 @@ public class BookingServiceTests
         Assert.Equal(updateCmd.Children, existing.Children);
     }
 
-    [Fact(DisplayName = "✅ Update booking when not found should do nothing")]
+    [Fact(DisplayName = " Update booking when not found should do nothing")]
     public async Task UpdateAsync_ShouldDoNothing_WhenBookingDoesNotExist()
     {
         var updateCmd = new UpdateBookingCommand
@@ -168,7 +176,7 @@ public class BookingServiceTests
         _bookingRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Booking>()), Times.Never);
     }
 
-    [Fact(DisplayName = "✅ Search bookings should return result")]
+    [Fact(DisplayName = " Search bookings should return result")]
     public async Task SearchBookingsAsync_ShouldReturnList()
     {
         var query = new SearchBookingsQuery { UserId = 1 };
