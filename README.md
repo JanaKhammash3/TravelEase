@@ -57,16 +57,27 @@ A backend **RESTful API** for a hotel booking system, built with **C#**, **ASP.N
 
 ---
 
-## 🧪 Unit Testing
+## ✅ Unit Testing
 
-Test coverage for:
-- `HotelService`
-- `BookingService`
-- `RoomService`
-- `Admin Services`
+Unit tests were written using **xUnit** and **Moq**, and are automatically executed via **GitHub Actions** as part of the CI workflow.
 
-Tests written using **xUnit** and **Moq**, run via **GitHub Actions**.
+Test coverage includes:
 
+- **Core Services:**
+  - `HotelService`
+  - `BookingService`
+  - `RoomService`
+  - `AuthService`
+  - `CityService`
+  - `ReviewService`
+
+- **Utility/Integration Services:**
+  - `CloudinaryImageService`
+  - `EmailService`
+  - `PdfReceiptGenerator`
+  - `StripeService` (for Stripe payment integration)
+
+- **And Other Controllers.**
 ---
 
 ## 📁 Project Structure
