@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelEase.API", "TravelEas
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelEase.Tests", "tests\TravelEase.Tests\TravelEase.Tests.csproj", "{FEA07553-5A29-42E5-811E-201890E50A49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelEase.Tests", "Tests\TravelEase.Tests\TravelEase.Tests.csproj", "{FEA07553-5A29-42E5-811E-201890E50A49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
