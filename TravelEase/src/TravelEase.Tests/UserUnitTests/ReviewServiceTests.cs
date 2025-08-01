@@ -20,7 +20,7 @@ public class ReviewServiceTests
         _service = new ReviewService(_reviewRepoMock.Object, _userRepoMock.Object);
     }
 
-    [Fact(DisplayName = "✅ Create review")]
+    [Fact(DisplayName = "Create review")]
     public async Task CreateReviewAsync_ShouldAddReview()
     {
         var dto = new ReviewDto
@@ -40,7 +40,7 @@ public class ReviewServiceTests
         )), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Get reviews by hotel ID")]
+    [Fact(DisplayName = "Get reviews by hotel ID")]
     public async Task GetReviewsByHotelIdAsync_ShouldReturnList()
     {
         var reviews = new List<Review>
@@ -58,7 +58,7 @@ public class ReviewServiceTests
         Assert.Equal("Bob", result[1].UserName);
     }
 
-    [Fact(DisplayName = "✅ Delete review")]
+    [Fact(DisplayName = "Delete review")]
     public async Task DeleteReviewAsync_ShouldCallRepo()
     {
         await _service.DeleteReviewAsync(99);

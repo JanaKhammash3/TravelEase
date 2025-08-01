@@ -2,7 +2,7 @@
 
 public class City
 {
-    public int Id { get; set; }  // ✅ Must match Hotel's `CityId`
+    public int Id { get; set; }  // Must match Hotel's CityId
     public string Name { get; set; }
     public string Country { get; set; }
     public string PostOffice { get; set; }

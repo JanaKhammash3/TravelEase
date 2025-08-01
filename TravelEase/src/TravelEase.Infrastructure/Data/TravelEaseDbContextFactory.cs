@@ -9,7 +9,6 @@ namespace TravelEase.TravelEase.Infrastructure.Data
     {
         public TravelEaseDbContext CreateDbContext(string[] args)
         {
-            // Adjust the path if you're in a different location
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false)

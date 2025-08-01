@@ -18,7 +18,7 @@ public class RoomServiceTests
         _service = new RoomService(_roomRepoMock.Object);
     }
 
-    [Fact(DisplayName = "✅ Create room")]
+    [Fact(DisplayName = "Create room")]
     public async Task CreateRoomAsync_ShouldAddRoom()
     {
         var cmd = new CreateRoomCommand
@@ -27,7 +27,7 @@ public class RoomServiceTests
             CapacityAdults = 2,
             CapacityChildren = 1,
             PricePerNight = 150.00m,
-            Category = RoomCategory.Deluxe, // ✅ Changed from 'Luxury' to 'Deluxe'
+            Category = RoomCategory.Deluxe, 
             HotelId = 1
         };
 
@@ -40,13 +40,13 @@ public class RoomServiceTests
             room.CapacityAdults == 2 &&
             room.CapacityChildren == 1 &&
             room.PricePerNight == 150.00m &&
-            room.Category == RoomCategory.Deluxe && // ✅ Same here
+            room.Category == RoomCategory.Deluxe && 
             room.HotelId == 1
         )), Times.Once);
     }
 
 
-    [Fact(DisplayName = "✅ Get all rooms")]
+    [Fact(DisplayName = "Get all rooms")]
     public async Task GetAllRoomsAsync_ShouldReturnList()
     {
         _roomRepoMock.Setup(r => r.GetAllRoomsAsync()).ReturnsAsync(new List<Room> { new(), new() });
@@ -56,7 +56,7 @@ public class RoomServiceTests
         Assert.Equal(2, result.Count);
     }
 
-    [Fact(DisplayName = "✅ Get room by ID")]
+    [Fact(DisplayName = "Get room by ID")]
     public async Task GetRoomByIdAsync_ShouldReturnRoom()
     {
         var room = new Room { Id = 7, Number = "207" };
@@ -68,7 +68,7 @@ public class RoomServiceTests
         Assert.Equal("207", result.Number);
     }
 
-    [Fact(DisplayName = "✅ Delete room when found")]
+    [Fact(DisplayName = "Delete room when found")]
     public async Task DeleteRoomAsync_ShouldDeleteRoom()
     {
         var room = new Room { Id = 3 };
@@ -79,7 +79,7 @@ public class RoomServiceTests
         _roomRepoMock.Verify(r => r.DeleteRoomAsync(room), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Delete room when not found does nothing")]
+    [Fact(DisplayName = "Delete room when not found does nothing")]
     public async Task DeleteRoomAsync_ShouldNotFail_WhenRoomNotFound()
     {
         _roomRepoMock.Setup(r => r.GetRoomByIdAsync(999)).ReturnsAsync((Room)null);
@@ -89,7 +89,7 @@ public class RoomServiceTests
         _roomRepoMock.Verify(r => r.DeleteRoomAsync(It.IsAny<Room>()), Times.Never);
     }
 
-    [Fact(DisplayName = "✅ Update room when found")]
+    [Fact(DisplayName = "Update room when found")]
     public async Task UpdateRoomAsync_ShouldUpdateRoom()
     {
         var room = new Room { Id = 5 };
@@ -114,7 +114,7 @@ public class RoomServiceTests
         _roomRepoMock.Verify(r => r.UpdateRoomAsync(room), Times.Once);
     }
 
-    [Fact(DisplayName = "❌ Update room when not found should throw")]
+    [Fact(DisplayName = "Update room when not found should throw")]
     public async Task UpdateRoomAsync_ShouldThrow_WhenNotFound()
     {
         var cmd = new UpdateRoomCommand
@@ -135,7 +135,7 @@ public class RoomServiceTests
         Assert.Equal("Room not found", ex.Message);
     }
 
-    [Fact(DisplayName = "✅ Search rooms returns filtered result")]
+    [Fact(DisplayName = "Search rooms returns filtered result")]
     public async Task SearchRoomsAsync_ShouldReturnMatchingRooms()
     {
         var query = new SearchRoomsQuery { HotelId = 1, MinPrice = 100, MaxPrice = 300 };

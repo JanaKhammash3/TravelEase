@@ -12,7 +12,7 @@ namespace TravelEase.TravelEase.Tests.UserUnitTests;
 
 public class HotelControllerTests
 {
-    [Fact(DisplayName = "✅ UploadImages uploads files and returns uploaded URLs")]
+    [Fact(DisplayName = "UploadImages uploads files and returns uploaded URLs")]
     public async Task UploadImages_ShouldUploadFilesAndReturnUrls()
     {
         // Arrange

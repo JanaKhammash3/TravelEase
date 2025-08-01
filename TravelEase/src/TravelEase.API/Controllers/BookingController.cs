@@ -35,7 +35,7 @@ public class BookingController : ControllerBase
         _config = config;
     }
 
-    // ✅ Stripe Payment Initiation
+    // Stripe Payment Initiation
     [HttpPost("stripe-checkout")]
     public async Task<IActionResult> CreateStripeSession([FromBody] StripeCheckoutRequestDto dto)
     {
@@ -85,7 +85,7 @@ public class BookingController : ControllerBase
         return Ok(new { sessionId = session.Id, url = session.Url });
     }
 
-    // ✅ Stripe Webhook to confirm payment and create Booking
+    // Stripe Webhook to confirm payment and create Booking
     [HttpPost("stripe-webhook")]
     public async Task<IActionResult> StripeWebhook()
     {
@@ -193,14 +193,14 @@ public class BookingController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateBookingCommand cmd)
     {
         await _bookingService.CreateAsync(cmd);
-        return Ok(new { message = "✅ Booking created successfully" });
+        return Ok(new { message = "Booking created successfully" });
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await _bookingService.DeleteAsync(id);
-        return Ok(new { message = "🗑️ Booking deleted" });
+        return Ok(new { message = "Booking deleted" });
     }
 
     [HttpPut("{id}")]
@@ -208,7 +208,7 @@ public class BookingController : ControllerBase
     {
         if (id != cmd.Id) return BadRequest("Mismatched ID");
         await _bookingService.UpdateAsync(cmd);
-        return Ok(new { message = "✅ Booking updated" });
+        return Ok(new { message = "Booking updated" });
     }
 
     [HttpGet("search")]

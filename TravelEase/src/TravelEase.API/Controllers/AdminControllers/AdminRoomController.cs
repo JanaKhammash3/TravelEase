@@ -7,7 +7,7 @@ namespace TravelEase.TravelEase.API.Controllers.AdminControllers;
 
 [ApiController]
 [Route("api/admin/rooms")]
-[Authorize(Roles = "Admin")] // ✅ Require JWT with Admin role
+[Authorize(Roles = "Admin")] // Require JWT with Admin role
 public class AdminRoomController : ControllerBase
 {
     private readonly IAdminRoomService _service;

@@ -1,7 +1,9 @@
-﻿// Infrastructure/Services/SmtpClientWrapper.cs
+﻿
 using System.Net;
 using System.Net.Mail;
 using TravelEase.TravelEase.Application.Interfaces;
+
+namespace TravelEase.TravelEase.Infrastructure.Services;
 
 public class SmtpClientWrapper : ISmtpClientWrapper
 {

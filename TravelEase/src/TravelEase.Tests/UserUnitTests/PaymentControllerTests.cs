@@ -10,7 +10,7 @@ namespace TravelEase.TravelEase.Tests.UserUnitTests;
 
 public class PaymentControllerTests
 {
-    [Fact(DisplayName = "✅ CreateCheckoutSession returns Stripe session DTO")]
+    [Fact(DisplayName = "CreateCheckoutSession returns Stripe session DTO")]
     public void CreateCheckoutSession_ShouldReturnValidSessionDto()
     {
         // Arrange

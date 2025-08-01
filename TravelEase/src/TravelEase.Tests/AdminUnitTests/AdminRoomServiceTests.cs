@@ -2,6 +2,7 @@
 using TravelEase.TravelEase.Application.DTOs.Admin;
 using TravelEase.TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Services.Admin;
 using Xunit;
 
 namespace TravelEase.TravelEase.Tests.AdminUnitTests;

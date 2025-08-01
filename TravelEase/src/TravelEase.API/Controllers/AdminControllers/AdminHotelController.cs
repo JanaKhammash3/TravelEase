@@ -16,7 +16,7 @@ public class AdminHotelController : ControllerBase
         _service = service;
     }
 
-    // ✅ GET with optional filters
+    // GET with optional filters
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? name,

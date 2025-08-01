@@ -19,7 +19,7 @@ public class BookingServiceTests
         _service = new BookingService(_bookingRepoMock.Object);
     }
 
-    [Fact(DisplayName = "✅ Create booking when room is available")]
+    [Fact(DisplayName = "Create booking when room is available")]
     public async Task CreateAsync_ShouldCreateBooking_WhenRoomIsAvailable()
     {
         var command = new CreateBookingCommand
@@ -100,7 +100,7 @@ public class BookingServiceTests
         Assert.Equal("203", result.RoomNumber);
     }
 
-    [Fact(DisplayName = "✅ Delete booking if exists")]
+    [Fact(DisplayName = "Delete booking if exists")]
     public async Task DeleteAsync_ShouldCallRepo_WhenBookingExists()
     {
         var booking = new Booking { Id = 3 };

@@ -71,12 +71,12 @@ public class TravelEaseDbContext : DbContext
             .HasForeignKey(d => d.RoomId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // 🆕 Enum conversion
+        // Enum conversion
         modelBuilder.Entity<Booking>()
             .Property(b => b.PaymentMethod)
             .HasConversion(new EnumToStringConverter<PaymentMethod>());
 
-        // 🆕 Decimal and string field constraints
+        // Decimal and string field constraints
         modelBuilder.Entity<Booking>()
             .Property(b => b.TotalPrice)
             .HasColumnType("decimal(18,2)");

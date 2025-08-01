@@ -1,4 +1,4 @@
-﻿using TravelEase.TravelEase.Domain.Entities;
+﻿namespace TravelEase.TravelEase.Domain.Entities;
 
 public class HotelImage
 {

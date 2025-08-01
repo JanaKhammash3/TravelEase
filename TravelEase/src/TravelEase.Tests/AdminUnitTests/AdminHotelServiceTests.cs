@@ -2,6 +2,7 @@
 using TravelEase.TravelEase.Application.DTOs.Admin;
 using TravelEase.TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Services.Admin;
 using Xunit;
 
 namespace TravelEase.TravelEase.Tests.AdminUnitTests;
@@ -30,8 +31,8 @@ public class AdminHotelServiceTests
             Owner = "Sato",
             StarRating = 4,
             CityName = "Tokyo",
-            Location = "Tokyo Center",          // ✅ Required
-            Amenities = "WiFi, AC"              // ✅ Required
+            Location = "Tokyo Center",          // Required
+            Amenities = "WiFi, AC"              // Required
         };
 
         var result = await service.CreateAsync(dto);
@@ -131,8 +132,8 @@ public class AdminHotelServiceTests
             CityName = "Starsville",
             Owner = "Top",
             StarRating = 5,
-            Location = "Peak",                 // ✅ Required
-            Amenities = "Everything"          // ✅ Required
+            Location = "Peak",                 // Required
+            Amenities = "Everything"          // Required
         };
 
         var result = await service.CreateAsync(dto);

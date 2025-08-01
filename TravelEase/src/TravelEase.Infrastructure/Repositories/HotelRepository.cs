@@ -100,7 +100,7 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
                 {
                     Id = v.Hotel.Id,
                     Name = v.Hotel.Name,
-                    City = v.Hotel.City.Name, // ✅ FIXED
+                    City = v.Hotel.City.Name, 
                     StarRating = v.Hotel.StarRating,
                     ThumbnailUrl = v.Hotel.ThumbnailUrl
                 })
@@ -120,7 +120,7 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
                 .GroupBy(v => v.Hotel.City)
                 .Select(g => new TrendingCityDto
                 {
-                    City = g.Key.Name, // ✅ FIXED
+                    City = g.Key.Name, 
                     VisitCount = g.Count(),
                     ThumbnailUrl = _context.Hotels
                         .Where(h => h.City.Id == g.Key.Id)

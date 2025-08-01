@@ -17,6 +17,7 @@ using TravelEase.TravelEase.Infrastructure.Data;
 using TravelEase.TravelEase.Infrastructure.Repositories;
 using TravelEase.TravelEase.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
+using TravelEase.TravelEase.Infrastructure.Services.Admin;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -25,17 +26,17 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
 });
 
-// ✅ Logging environment
-Console.WriteLine($"🌍 ENV: {builder.Environment.EnvironmentName}");
+// Logging environment
+Console.WriteLine($"ENV: {builder.Environment.EnvironmentName}");
 
-// ✅ Config loading (supports Docker)
+// Config loading (supports Docker)
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
-// ✅ Set QuestPDF license (Community Edition)
+// Set QuestPDF license (Community Edition)
 QuestPDF.Settings.License = LicenseType.Community;
 
 // ==========================

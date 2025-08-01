@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TravelEase.TravelEase.Application.DTOs.Admin;
 using TravelEase.TravelEase.Application.Interfaces.Admin;
-// 👈 Add this
-
 namespace TravelEase.TravelEase.API.Controllers.AdminControllers;
 
 [ApiController]

@@ -85,7 +85,7 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok(result);
         }
 
-        // ✅ Record view when user visits hotel page
+        // Record view when user visits hotel page
         [HttpPost("{hotelId}/view")]
         public async Task<IActionResult> RecordHotelView(int hotelId)
         {
@@ -94,7 +94,7 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok();
         }
 
-        // ✅ Get top 5 most visited cities
+        // Get top 5 most visited cities
         [HttpGet("trending-destinations")]
         public async Task<IActionResult> GetTrendingDestinations()
         {
@@ -102,7 +102,7 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok(topCities);
         }
 
-        // ✅ Helper to extract user ID from JWT token
+        // Helper to extract user ID from JWT token
         private int GetUserIdFromToken()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -131,7 +131,7 @@ namespace TravelEase.TravelEase.API.Controllers
                 urls.Add(url);
             }
 
-            await _hotelService.SaveHotelImageUrlsAsync(id, urls); // <-- Save to DB
+            await _hotelService.SaveHotelImageUrlsAsync(id, urls); // Save to DB
 
             return Ok(new { UploadedUrls = urls });
         }

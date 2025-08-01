@@ -26,7 +26,7 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                 Price = h.Rooms.Any()
                     ? h.Rooms.Min(r => r.PricePerNight)
                     : 0,
-                ThumbnailUrl = h.Images.FirstOrDefault()?.ImageUrl ?? "", // ✅ Use first uploaded image
+                ThumbnailUrl = h.Images.FirstOrDefault()?.ImageUrl ?? "", // Use first uploaded image
                 Latitude = h.Latitude,
                 Longitude = h.Longitude
             }).ToList();

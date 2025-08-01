@@ -15,8 +15,8 @@
 
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
-        public string? Amenities { get; set; } // Optional: comma-separated
-        public string? RoomCategory { get; set; } // Example: "Luxury", "Budget"
+        public string? Amenities { get; set; } 
+        public string? RoomCategory { get; set; } // Ex: "Luxury", "Budget"
 
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 10;

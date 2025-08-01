@@ -11,7 +11,7 @@ namespace TravelEase.TravelEase.Tests.UserUnitTests
     {
         public PdfReceiptGeneratorTests()
         {
-            // ✅ Required for QuestPDF to run without license error
+            //Required for QuestPDF to run without license error
             QuestPDF.Settings.License = LicenseType.Community;
         }
 

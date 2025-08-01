@@ -18,7 +18,7 @@ public class HotelServiceTests
         _service = new HotelService(_hotelRepoMock.Object);
     }
 
-    [Fact(DisplayName = "✅ Create hotel")]
+    [Fact(DisplayName = "Create hotel")]
     public async Task CreateHotelAsync_ShouldAddHotel()
     {
         var cmd = new CreateHotelCommand
@@ -37,7 +37,7 @@ public class HotelServiceTests
             h.Name == "Hotel Lux" && h.CityId == 1 && h.Owner == "John Doe")), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Update hotel")]
+    [Fact(DisplayName = "Update hotel")]
     public async Task UpdateHotelAsync_ShouldUpdate_WhenExists()
     {
         var hotel = new Hotel { Id = 1 };
@@ -60,7 +60,7 @@ public class HotelServiceTests
         _hotelRepoMock.Verify(r => r.UpdateAsync(hotel), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Delete hotel")]
+    [Fact(DisplayName = "Delete hotel")]
     public async Task DeleteHotelAsync_ShouldDelete_WhenExists()
     {
         var hotel = new Hotel { Id = 1 };
@@ -71,7 +71,7 @@ public class HotelServiceTests
         _hotelRepoMock.Verify(r => r.DeleteAsync(hotel), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Get all hotels")]
+    [Fact(DisplayName = "Get all hotels")]
     public async Task GetAllHotelsAsync_ShouldReturnList()
     {
         _hotelRepoMock.Setup(r => r.GetAllAsync()).ReturnsAsync(new List<Hotel> { new Hotel(), new Hotel() });
@@ -81,7 +81,7 @@ public class HotelServiceTests
         Assert.Equal(2, result.Count);
     }
 
-    [Fact(DisplayName = "✅ Get hotel by ID")]
+    [Fact(DisplayName = "Get hotel by ID")]
     public async Task GetHotelByIdAsync_ShouldReturnHotel()
     {
         var hotel = new Hotel { Id = 5 };
@@ -92,7 +92,7 @@ public class HotelServiceTests
         Assert.NotNull(result);
     }
 
-    [Fact(DisplayName = "✅ Search hotels")]
+    [Fact(DisplayName = "Search hotels")]
     public async Task SearchHotelsAsync_ShouldReturnPagedList()
     {
         var query = new SearchHotelsQuery { Name = "test", Page = 1, PageSize = 10 };
@@ -108,7 +108,7 @@ public class HotelServiceTests
         Assert.Contains("Test", result.First().Name, StringComparison.OrdinalIgnoreCase);
     }
 
-    [Fact(DisplayName = "✅ Get featured hotels")]
+    [Fact(DisplayName = "Get featured hotels")]
     public async Task GetFeaturedHotelsAsync_ShouldReturnList()
     {
         _hotelRepoMock.Setup(r => r.GetFeaturedHotelsAsync()).ReturnsAsync(new List<Hotel> { new Hotel() });
@@ -118,14 +118,14 @@ public class HotelServiceTests
         Assert.Single(result);
     }
 
-    [Fact(DisplayName = "✅ Record hotel view")]
+    [Fact(DisplayName = "Record hotel view")]
     public async Task RecordHotelViewAsync_ShouldCallRepository()
     {
         await _service.RecordHotelViewAsync(1, 2);
         _hotelRepoMock.Verify(r => r.RecordHotelViewAsync(1, 2), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Get recent hotels")]
+    [Fact(DisplayName = "Get recent hotels")]
     public async Task GetRecentlyVisitedHotelsAsync_ShouldReturnRecent()
     {
         _hotelRepoMock.Setup(r => r.GetRecentlyVisitedHotelsAsync(1, 5)).ReturnsAsync(new List<HotelDto> { new() });
@@ -135,7 +135,7 @@ public class HotelServiceTests
         Assert.Single(result);
     }
 
-    [Fact(DisplayName = "✅ Get trending cities")]
+    [Fact(DisplayName = "Get trending cities")]
     public async Task GetTrendingCitiesAsync_ShouldReturnList()
     {
         _hotelRepoMock.Setup(r => r.GetTrendingCitiesAsync(5)).ReturnsAsync(new List<TrendingCityDto> { new() });
@@ -145,7 +145,7 @@ public class HotelServiceTests
         Assert.Single(result);
     }
 
-    [Fact(DisplayName = "✅ Upload hotel images")]
+    [Fact(DisplayName = "Upload hotel images")]
     public async Task UploadImagesAsync_ShouldSaveFilesAndReturnUrls()
     {
         // Arrange
@@ -168,7 +168,7 @@ public class HotelServiceTests
     }
 
 
-    [Fact(DisplayName = "❌ Upload hotel images throws if hotel not found")]
+    [Fact(DisplayName = "Upload hotel images throws if hotel not found")]
     public async Task UploadImagesAsync_ShouldThrowIfHotelNotFound()
     {
         _hotelRepoMock.Setup(r => r.GetByIdAsync(123)).ReturnsAsync((Hotel)null!);
@@ -179,7 +179,7 @@ public class HotelServiceTests
         Assert.Equal("Hotel not found", ex.Message);
     }
 
-    [Fact(DisplayName = "✅ Save hotel image URLs")]
+    [Fact(DisplayName = "Save hotel image URLs")]
     public async Task SaveHotelImageUrlsAsync_ShouldCallRepo()
     {
         var urls = new List<string> { "/img1.jpg" };

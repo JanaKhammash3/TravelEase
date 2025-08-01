@@ -4,6 +4,8 @@ using TravelEase.TravelEase.Application.Interfaces.Admin;
 using TravelEase.TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Infrastructure.Data;
 
+namespace TravelEase.TravelEase.Infrastructure.Services.Admin;
+
 public class AdminCityService : IAdminCityService {
     private readonly TravelEaseDbContext _context;
 

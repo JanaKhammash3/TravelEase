@@ -17,7 +17,7 @@ public class CityServiceTests
         _service = new CityService(_cityRepoMock.Object);
     }
 
-    [Fact(DisplayName = "✅ Get all cities")]
+    [Fact(DisplayName = "Get all cities")]
     public async Task GetAllCitiesAsync_ShouldReturnCities()
     {
         var cities = new List<City>
@@ -33,7 +33,7 @@ public class CityServiceTests
         Assert.Equal(2, result.Count);
     }
 
-    [Fact(DisplayName = "✅ Create city")]
+    [Fact(DisplayName = "Create city")]
     public async Task CreateCityAsync_ShouldAddCity()
     {
         var cmd = new CreateCityCommand
@@ -52,7 +52,7 @@ public class CityServiceTests
         )), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Delete city when found")]
+    [Fact(DisplayName = "Delete city when found")]
     public async Task DeleteCityAsync_ShouldDelete_WhenCityExists()
     {
         var city = new City { Id = 10, Name = "Dubai" };
@@ -64,7 +64,7 @@ public class CityServiceTests
         _cityRepoMock.Verify(r => r.DeleteAsync(city), Times.Once);
     }
 
-    [Fact(DisplayName = "✅ Delete city when not found — should do nothing")]
+    [Fact(DisplayName = "Delete city when not found — should do nothing")]
     public async Task DeleteCityAsync_ShouldDoNothing_WhenNotFound()
     {
         _cityRepoMock.Setup(r => r.GetByIdAsync(99)).ReturnsAsync((City)null!);
@@ -74,7 +74,7 @@ public class CityServiceTests
         _cityRepoMock.Verify(r => r.DeleteAsync(It.IsAny<City>()), Times.Never);
     }
 
-    [Fact(DisplayName = "✅ Update city when found")]
+    [Fact(DisplayName = "Update city when found")]
     public async Task UpdateCityAsync_ShouldUpdate_WhenCityExists()
     {
         var city = new City
@@ -103,7 +103,7 @@ public class CityServiceTests
         Assert.Equal("12345", city.PostOffice);
     }
 
-    [Fact(DisplayName = "❌ Update city when not found — should throw")]
+    [Fact(DisplayName = "Update city when not found — should throw")]
     public async Task UpdateCityAsync_ShouldThrow_WhenCityNotFound()
     {
         var updateCmd = new UpdateCityCommand
@@ -120,7 +120,7 @@ public class CityServiceTests
         Assert.Equal("City not found", ex.Message);
     }
 
-    [Fact(DisplayName = "✅ Search cities")]
+    [Fact(DisplayName = "Search cities")]
     public async Task SearchCitiesAsync_ShouldReturnResults()
     {
         var cities = new List<City>

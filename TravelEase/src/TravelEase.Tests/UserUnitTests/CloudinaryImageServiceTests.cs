@@ -9,7 +9,7 @@ namespace TravelEase.TravelEase.Tests.UserUnitTests
 {
     public class CloudinaryImageServiceTests
     {
-        [Fact(DisplayName = "✅ UploadImageAsync returns mocked secure URL")]
+        [Fact(DisplayName = "UploadImageAsync returns mocked secure URL")]
         public async Task UploadImageAsync_ShouldReturnSecureUrl()
         {
             // Arrange

@@ -26,7 +26,7 @@ public class AuthServiceTests
         _authService = new AuthService(_userRepoMock.Object, _configMock.Object);
     }
 
-    [Fact(DisplayName = "✅ Valid registration — RegisterAsync returns token")]
+    [Fact(DisplayName = "Valid registration — RegisterAsync returns token")]
     public async Task RegisterAsync_ShouldReturnToken_WhenUserIsNew()
     {
         var command = new RegisterCommand
@@ -47,7 +47,7 @@ public class AuthServiceTests
         Assert.Equal("User", result.Role);
     }
 
-    [Fact(DisplayName = "❌ Duplicate registration — RegisterAsync throws Exception")]
+    [Fact(DisplayName = "Duplicate registration — RegisterAsync throws Exception")]
     public async Task RegisterAsync_ShouldThrow_WhenUserExists()
     {
         var command = new RegisterCommand
@@ -63,7 +63,7 @@ public class AuthServiceTests
         Assert.Equal("User already exists", ex.Message);
     }
 
-    [Fact(DisplayName = "✅ Valid login — LoginAsync returns token")]
+    [Fact(DisplayName = "Valid login — LoginAsync returns token")]
     public async Task LoginAsync_ShouldReturnToken_WhenCredentialsAreCorrect()
     {
         var plainPassword = "mypassword";
@@ -94,7 +94,7 @@ public class AuthServiceTests
         Assert.Equal("User", result.Role);
     }
 
-    [Fact(DisplayName = "❌ Wrong password — LoginAsync throws Exception")]
+    [Fact(DisplayName = "Wrong password — LoginAsync throws Exception")]
     public async Task LoginAsync_ShouldThrow_WhenPasswordIsWrong()
     {
         var user = new User
@@ -118,7 +118,7 @@ public class AuthServiceTests
         Assert.Equal("Invalid credentials", ex.Message);
     }
 
-    [Fact(DisplayName = "❌ User not found — LoginAsync throws Exception")]
+    [Fact(DisplayName = "User not found — LoginAsync throws Exception")]
     public async Task LoginAsync_ShouldThrow_WhenUserNotFound()
     {
         var command = new LoginCommand
