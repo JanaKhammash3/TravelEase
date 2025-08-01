@@ -12,87 +12,83 @@ using PaymentMethod = TravelEase.TravelEase.Domain.Enums.PaymentMethod;
 using Microsoft.Extensions.Configuration;
 using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.TravelEase.API.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class BookingController : ControllerBase
+namespace TravelEase.TravelEase.API.Controllers
 {
-    private readonly TravelEaseDbContext _context;
-    private readonly IEmailService _emailService;
-    private readonly IBookingService _bookingService;
-    private readonly IConfiguration _config;
-
-    public BookingController(
-        TravelEaseDbContext context,
-        IEmailService emailService,
-        IBookingService bookingService,
-        IConfiguration config)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class BookingController : ControllerBase
     {
-        _context = context;
-        _emailService = emailService;
-        _bookingService = bookingService;
-        _config = config;
-    }
+        private readonly TravelEaseDbContext _context;
+        private readonly IEmailService _emailService;
+        private readonly IBookingService _bookingService;
+        private readonly IConfiguration _config;
 
-    // Stripe Payment Initiation
-    [HttpPost("stripe-checkout")]
-    public async Task<IActionResult> CreateStripeSession([FromBody] StripeCheckoutRequestDto dto)
-    {
-        var room = await _context.Rooms.Include(r => r.Hotel).FirstOrDefaultAsync(r => r.Id == dto.RoomId);
-        if (room == null) return NotFound("Room not found");
-
-        var days = (dto.CheckOut - dto.CheckIn).Days;
-        var total = room.PricePerNight * days;
-
-        var options = new SessionCreateOptions
+        public BookingController(
+            TravelEaseDbContext context,
+            IEmailService emailService,
+            IBookingService bookingService,
+            IConfiguration config)
         {
-            PaymentMethodTypes = new List<string> { "card" },
-            LineItems = new List<SessionLineItemOptions>
+            _context = context;
+            _emailService = emailService;
+            _bookingService = bookingService;
+            _config = config;
+        }
+
+        [HttpPost("stripe-checkout")]
+        public async Task<IActionResult> CreateStripeSession([FromBody] StripeCheckoutRequestDto dto)
+        {
+            var room = await _context.Rooms.Include(r => r.Hotel).FirstOrDefaultAsync(r => r.Id == dto.RoomId);
+            if (room == null) return NotFound("Room not found");
+
+            var days = (dto.CheckOut - dto.CheckIn).Days;
+            var total = room.PricePerNight * days;
+
+            var options = new SessionCreateOptions
             {
-                new SessionLineItemOptions
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions>
                 {
-                    PriceData = new SessionLineItemPriceDataOptions
+                    new SessionLineItemOptions
                     {
-                        Currency = "usd",
-                        UnitAmount = (long)(total * 100), // in cents
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        PriceData = new SessionLineItemPriceDataOptions
                         {
-                            Name = $"Hotel Booking - {room.Hotel.Name}"
-                        }
-                    },
-                    Quantity = 1
+                            Currency = "usd",
+                            UnitAmount = (long)(total * 100),
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = $"Hotel Booking - {room.Hotel.Name}"
+                            }
+                        },
+                        Quantity = 1
+                    }
+                },
+                Mode = "payment",
+                SuccessUrl = dto.SuccessUrl + "?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = dto.CancelUrl,
+                Metadata = new Dictionary<string, string>
+                {
+                    { "userId", dto.UserId.ToString() },
+                    { "roomId", dto.RoomId.ToString() },
+                    { "checkIn", dto.CheckIn.ToString("o") },
+                    { "checkOut", dto.CheckOut.ToString("o") },
+                    { "adults", dto.Adults.ToString() },
+                    { "children", dto.Children.ToString() },
+                    { "specialRequests", dto.SpecialRequests }
                 }
-            },
-            Mode = "payment",
-            SuccessUrl = dto.SuccessUrl + "?session_id={CHECKOUT_SESSION_ID}",
-            CancelUrl = dto.CancelUrl,
-            Metadata = new Dictionary<string, string>
-            {
-                { "userId", dto.UserId.ToString() },
-                { "roomId", dto.RoomId.ToString() },
-                { "checkIn", dto.CheckIn.ToString("o") },
-                { "checkOut", dto.CheckOut.ToString("o") },
-                { "adults", dto.Adults.ToString() },
-                { "children", dto.Children.ToString() },
-                { "specialRequests", dto.SpecialRequests }
-            }
-        };
+            };
 
-        var service = new SessionService();
-        var session = service.Create(options);
+            var service = new SessionService();
+            var session = service.Create(options);
 
-        return Ok(new { sessionId = session.Id, url = session.Url });
-    }
+            return Ok(new { sessionId = session.Id, url = session.Url });
+        }
 
-    // Stripe Webhook to confirm payment and create Booking
-    [HttpPost("stripe-webhook")]
-    public async Task<IActionResult> StripeWebhook()
-    {
-        var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-
-        try
+        [HttpPost("stripe-webhook")]
+        public async Task<IActionResult> StripeWebhook()
         {
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
             var stripeSecret = _config["Stripe:WebhookSecret"];
             var stripeEvent = EventUtility.ConstructEvent(
                 json,
@@ -104,7 +100,6 @@ public class BookingController : ControllerBase
             {
                 var session = stripeEvent.Data.Object as Session;
 
-                // Extract metadata
                 var userId = int.Parse(session.Metadata["userId"]);
                 var roomId = int.Parse(session.Metadata["roomId"]);
                 var checkIn = DateTime.Parse(session.Metadata["checkIn"]);
@@ -132,7 +127,6 @@ public class BookingController : ControllerBase
                     PaymentStatus = "Paid",
                     PaymentMethod = PaymentMethod.Stripe 
                 };
-
 
                 _context.Bookings.Add(booking);
                 await _context.SaveChangesAsync();
@@ -163,58 +157,52 @@ public class BookingController : ControllerBase
 
                 if (user != null)
                     await _emailService.SendEmailWithAttachmentAsync(user.Email, "Booking Confirmation", message, pdfBytes, "receipt.pdf");
-
-                return Ok();
             }
 
             return Ok();
         }
-        catch (Exception ex)
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            return BadRequest($"Webhook Error: {ex.Message}");
+            var bookings = await _bookingService.GetAllAsync();
+            return Ok(bookings);
         }
-    }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var bookings = await _bookingService.GetAllAsync();
-        return Ok(bookings);
-    }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var booking = await _bookingService.GetByIdAsync(id);
+            return booking == null ? NotFound() : Ok(booking);
+        }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
-    {
-        var booking = await _bookingService.GetByIdAsync(id);
-        return booking == null ? NotFound() : Ok(booking);
-    }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateBookingCommand cmd)
+        {
+            await _bookingService.CreateAsync(cmd);
+            return Ok(new { message = "Booking created successfully" });
+        }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateBookingCommand cmd)
-    {
-        await _bookingService.CreateAsync(cmd);
-        return Ok(new { message = "Booking created successfully" });
-    }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _bookingService.DeleteAsync(id);
+            return Ok(new { message = "Booking deleted" });
+        }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _bookingService.DeleteAsync(id);
-        return Ok(new { message = "Booking deleted" });
-    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateBookingCommand cmd)
+        {
+            if (id != cmd.Id) return BadRequest("Mismatched ID");
+            await _bookingService.UpdateAsync(cmd);
+            return Ok(new { message = "Booking updated" });
+        }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateBookingCommand cmd)
-    {
-        if (id != cmd.Id) return BadRequest("Mismatched ID");
-        await _bookingService.UpdateAsync(cmd);
-        return Ok(new { message = "Booking updated" });
-    }
-
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] SearchBookingsQuery query)
-    {
-        var results = await _bookingService.SearchBookingsAsync(query);
-        return Ok(results);
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] SearchBookingsQuery query)
+        {
+            var results = await _bookingService.SearchBookingsAsync(query);
+            return Ok(results);
+        }
     }
 }

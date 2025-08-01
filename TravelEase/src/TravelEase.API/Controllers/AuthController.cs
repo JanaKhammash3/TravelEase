@@ -18,29 +18,15 @@ namespace TravelEase.TravelEase.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterCommand command)
         {
-            try
-            {
-                var token = await _authService.RegisterAsync(command);
-                return Ok(new { Token = token });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
+            var token = await _authService.RegisterAsync(command);
+            return Ok(new { Token = token });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            try
-            {
-                var token = await _authService.LoginAsync(command);
-                return Ok(new { Token = token });
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(new { Error = ex.Message });
-            }
+            var token = await _authService.LoginAsync(command);
+            return Ok(new { Token = token });
         }
     }
 }

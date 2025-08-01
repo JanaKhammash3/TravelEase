@@ -1,0 +1,42 @@
+﻿# Build artifacts
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.suo
+
+# IDE settings
+.vs/
+.vscode/
+.idea/
+
+# Environment variables & secrets
+.env
+*.env
+
+# Logs
+*.log
+logs/
+Logs/
+
+# Test output
+**/TestResults/
+**/tests/coverage/
+
+# Node/NPM cache (if you have frontend assets)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Docker files we don't want inside container
+docker-compose*
+Dockerfile*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

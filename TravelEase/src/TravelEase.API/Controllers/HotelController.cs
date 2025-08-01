@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 using TravelEase.TravelEase.API.Models;
 using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Infrastructure.Services;
 
 namespace TravelEase.TravelEase.API.Controllers
 {
@@ -27,10 +25,9 @@ namespace TravelEase.TravelEase.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllHotels()
         {
-            List<HotelDto> hotels = await _hotelService.GetAllHotelsAsync();
+            var hotels = await _hotelService.GetAllHotelsAsync();
             return Ok(hotels);
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHotelById(int id)
@@ -39,22 +36,12 @@ namespace TravelEase.TravelEase.API.Controllers
             return hotel == null ? NotFound() : Ok(hotel);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> CreateHotel([FromBody] CreateHotelCommand cmd)
         {
-            try
-            {
-                await _hotelService.CreateHotelAsync(cmd);
-                return Ok(new { message = "Hotel created successfully." });
-            }
-            catch (Exception ex)
-            {
-                var inner = ex.InnerException?.Message ?? ex.Message;
-                return StatusCode(500, new { error = inner });
-            }
+            await _hotelService.CreateHotelAsync(cmd);
+            return Ok(new { message = "Hotel created successfully." });
         }
-        
 
         [HttpPut]
         public async Task<IActionResult> UpdateHotel([FromBody] UpdateHotelCommand cmd)
@@ -72,7 +59,6 @@ namespace TravelEase.TravelEase.API.Controllers
 
         [HttpGet("search")]
         public async Task<IActionResult> SearchHotels([FromQuery] SearchHotelsQuery query)
-
         {
             var result = await _hotelService.SearchHotelsAsync(query);
             return Ok(result);
@@ -85,7 +71,6 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok(result);
         }
 
-        // Record view when user visits hotel page
         [HttpPost("{hotelId}/view")]
         public async Task<IActionResult> RecordHotelView(int hotelId)
         {
@@ -94,7 +79,6 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok();
         }
 
-        // Get top 5 most visited cities
         [HttpGet("trending-destinations")]
         public async Task<IActionResult> GetTrendingDestinations()
         {
@@ -102,7 +86,6 @@ namespace TravelEase.TravelEase.API.Controllers
             return Ok(topCities);
         }
 
-        // Helper to extract user ID from JWT token
         private int GetUserIdFromToken()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -112,7 +95,7 @@ namespace TravelEase.TravelEase.API.Controllers
 
             return int.Parse(userIdClaim.Value);
         }
-        
+
         [HttpGet("recent-hotels")]
         public async Task<IActionResult> GetRecentHotels([FromQuery] int count = 5)
         {
@@ -120,6 +103,7 @@ namespace TravelEase.TravelEase.API.Controllers
             var hotels = await _hotelRepository.GetRecentlyVisitedHotelsAsync(userId, count);
             return Ok(hotels);
         }
+
         [HttpPost("{id}/upload-images")]
         public async Task<IActionResult> UploadImages(int id, [FromForm] HotelImageUploadDto dto, [FromServices] IImageUploader cloudinaryService)
         {
@@ -131,12 +115,9 @@ namespace TravelEase.TravelEase.API.Controllers
                 urls.Add(url);
             }
 
-            await _hotelService.SaveHotelImageUrlsAsync(id, urls); // Save to DB
-
+            await _hotelService.SaveHotelImageUrlsAsync(id, urls);
             return Ok(new { UploadedUrls = urls });
         }
-
-        
 
         [HttpGet("{id}/nearby")]
         public async Task<IActionResult> GetNearbyAttractions(int id)
@@ -145,7 +126,6 @@ namespace TravelEase.TravelEase.API.Controllers
             if (hotel == null)
                 return NotFound("Hotel not found.");
 
-            // Mocked static attractions
             var attractions = new List<object>
             {
                 new { Name = "City Museum", Type = "Museum", DistanceKm = 1.5 },
@@ -160,7 +140,6 @@ namespace TravelEase.TravelEase.API.Controllers
             });
         }
 
-
         [HttpGet("{id}/available-rooms")]
         public IActionResult GetAvailableRooms(
             int id,
@@ -172,8 +151,5 @@ namespace TravelEase.TravelEase.API.Controllers
             var rooms = _hotelRepository.GetAvailableRoomsForHotel(id, checkIn, checkOut, adults, children);
             return Ok(rooms);
         }
-
-
-
     }
 }

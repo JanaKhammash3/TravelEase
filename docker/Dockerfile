@@ -16,5 +16,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /out .
 
+# Expose port
 EXPOSE 5000
 ENTRYPOINT ["dotnet", "TravelEase.API.dll"]

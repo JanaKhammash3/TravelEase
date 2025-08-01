@@ -17,6 +17,7 @@ using TravelEase.TravelEase.Infrastructure.Data;
 using TravelEase.TravelEase.Infrastructure.Repositories;
 using TravelEase.TravelEase.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
+using TravelEase.TravelEase.API.Middleware;
 using TravelEase.TravelEase.Infrastructure.Services.Admin;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -200,6 +201,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors("AllowAll");
 app.UseAuthentication();
