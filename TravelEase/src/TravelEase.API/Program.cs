@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using CloudinaryDotNet;
+using DotNetEnv; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -27,17 +28,32 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
     EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
 });
 
+// ==========================
+// Load .env if it exists
+// ==========================
+var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+if (File.Exists(envPath))
+{
+    Console.WriteLine("Loading environment variables from .env file...");
+    Env.Load(envPath);
+}
+
 // Logging environment
 Console.WriteLine($"ENV: {builder.Environment.EnvironmentName}");
 
-// Config loading (supports Docker)
+// ==========================
+// Config loading (supports Docker, env vars, and user secrets)
+// ==========================
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
+    .AddEnvironmentVariables()
+    .AddUserSecrets<Program>(optional: true);
 
+// ==========================
 // Set QuestPDF license (Community Edition)
+// ==========================
 QuestPDF.Settings.License = LicenseType.Community;
 
 // ==========================

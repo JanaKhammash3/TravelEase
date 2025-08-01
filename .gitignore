@@ -1,6 +1,13 @@
+# Build artifacts
 bin/
 obj/
-/packages/
+packages/
+
+# IDE files
 riderModule.iml
 /_ReSharper.Caches/
-src/TravelEase.API/appsettings.json
+.vs/
+.vscode/
+
+# Secrets
+.env
