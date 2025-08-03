@@ -101,7 +101,13 @@ namespace TravelEase.Tests.UserUnitTests
             _hotelRepoMock.Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                           .ReturnsAsync(new List<Hotel>
                           {
-                              new Hotel { Name = "Test Hotel", StarRating = 4, City = new City { Name = "Paris" }, Rooms = new List<Room> { new() { PricePerNight = 100 } } }
+                              new Hotel
+                              {
+                                  Name = "Test Hotel",
+                                  StarRating = 4,
+                                  City = new City { Name = "Paris" },
+                                  Rooms = new List<Room> { new() { PricePerNight = 100 } }
+                              }
                           });
 
             var result = await _service.SearchHotelsAsync(query);
@@ -130,7 +136,8 @@ namespace TravelEase.Tests.UserUnitTests
         [Fact(DisplayName = "Get recent hotels")]
         public async Task GetRecentlyVisitedHotelsAsync_ShouldReturnRecent()
         {
-            _hotelRepoMock.Setup(r => r.GetRecentlyVisitedHotelsAsync(1, 5)).ReturnsAsync(new List<HotelDto> { new() });
+            _hotelRepoMock.Setup(r => r.GetRecentlyVisitedHotelsAsync(1, 5))
+                          .ReturnsAsync(new List<HotelDto> { new() });
 
             var result = await _service.GetRecentlyVisitedHotelsAsync(1);
 
@@ -140,7 +147,8 @@ namespace TravelEase.Tests.UserUnitTests
         [Fact(DisplayName = "Get trending cities")]
         public async Task GetTrendingCitiesAsync_ShouldReturnList()
         {
-            _hotelRepoMock.Setup(r => r.GetTrendingCitiesAsync(5)).ReturnsAsync(new List<TrendingCityDto> { new() });
+            _hotelRepoMock.Setup(r => r.GetTrendingCitiesAsync(5))
+                          .ReturnsAsync(new List<TrendingCityDto> { new() });
 
             var result = await _service.GetTrendingCitiesAsync();
 
@@ -152,7 +160,8 @@ namespace TravelEase.Tests.UserUnitTests
         {
             var hotel = new Hotel { Id = 1, Images = new List<HotelImage>() };
             _hotelRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(hotel);
-            _hotelRepoMock.Setup(r => r.SaveHotelImageUrlsAsync(1, It.IsAny<List<string>>())).Returns(Task.CompletedTask);
+            _hotelRepoMock.Setup(r => r.SaveHotelImageUrlsAsync(1, It.IsAny<List<string>>()))
+                          .Returns(Task.CompletedTask);
 
             var mockStream = new MemoryStream(new byte[] { 0x1, 0x2, 0x3 });
             var files = new List<(string FileName, Stream Content)>
@@ -169,7 +178,7 @@ namespace TravelEase.Tests.UserUnitTests
         [Fact(DisplayName = "Upload hotel images throws if hotel not found")]
         public async Task UploadImagesAsync_ShouldThrowIfHotelNotFound()
         {
-            _hotelRepoMock.Setup(r => r.GetByIdAsync(123)).ReturnsAsync((Hotel)null!);
+            _hotelRepoMock.Setup(r => r.GetByIdAsync(123)).ReturnsAsync((Hotel?)null);
 
             var ex = await Assert.ThrowsAsync<Exception>(() =>
                 _service.UploadImagesAsync(123, new List<(string, Stream)>()));
