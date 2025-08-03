@@ -9,21 +9,21 @@ using QuestPDF.Infrastructure;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
-using TravelEase.API.Middleware;
-using TravelEase.Application.Behaviors;
-using TravelEase.Application.Features.Hotel.Validators;
-using TravelEase.Application.Features.Hotel;
-using TravelEase.Infrastructure.Data;
-using TravelEase.Infrastructure.Repositories;
-using TravelEase.Infrastructure.Services;
-using TravelEase.Application.Interfaces;
-using TravelEase.Application.Interfaces.Admin;
-using TravelEase.Infrastructure.Services.Admin;
-using TravelEase.Application.Features.Auth;
-using TravelEase.Application.Features.Booking;
-using TravelEase.Application.Features.City;
-using TravelEase.Application.Features.Review;
-using TravelEase.Application.Features.Room;
+using TravelEase.TravelEase.API.Middleware;
+using TravelEase.TravelEase.Application.Behaviors;
+using TravelEase.TravelEase.Application.Features.Hotel.Validators;
+using TravelEase.TravelEase.Application.Features.Hotel;
+using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Repositories;
+using TravelEase.TravelEase.Infrastructure.Services;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Application.Interfaces.Admin;
+using TravelEase.TravelEase.Infrastructure.Services.Admin;
+using TravelEase.TravelEase.Application.Features.Auth;
+using TravelEase.TravelEase.Application.Features.Booking;
+using TravelEase.TravelEase.Application.Features.City;
+using TravelEase.TravelEase.Application.Features.Review;
+using TravelEase.TravelEase.Application.Features.Room;
 
 // ==========================
 // Create Builder

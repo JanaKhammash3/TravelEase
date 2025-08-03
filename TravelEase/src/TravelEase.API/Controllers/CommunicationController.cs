@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TravelEase.Application.DTOs;
-using TravelEase.Application.Interfaces;
-using TravelEase.Infrastructure.Services;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Infrastructure.Services;
 
-namespace TravelEase.API.Controllers
+namespace TravelEase.TravelEase.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

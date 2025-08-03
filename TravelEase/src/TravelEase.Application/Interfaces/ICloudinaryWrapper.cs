@@ -1,6 +1,6 @@
 ﻿using CloudinaryDotNet.Actions;
 
-namespace TravelEase.Application.Interfaces
+namespace TravelEase.TravelEase.Application.Interfaces
 {
     public interface ICloudinaryWrapper
     {

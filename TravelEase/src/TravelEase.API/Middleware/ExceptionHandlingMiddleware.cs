@@ -2,7 +2,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
-namespace TravelEase.API.Middleware
+namespace TravelEase.TravelEase.API.Middleware
 {
     public class ExceptionHandlingMiddleware
     {

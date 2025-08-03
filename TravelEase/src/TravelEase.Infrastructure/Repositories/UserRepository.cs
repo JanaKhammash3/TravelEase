@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Entities;
-using TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Infrastructure.Data;
 
-namespace TravelEase.Infrastructure.Repositories
+namespace TravelEase.TravelEase.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {

@@ -2,16 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
-using TravelEase.API.Models;
-using TravelEase.Application.DTOs;
-using TravelEase.Application.Features.Booking;
-using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Entities;
-using TravelEase.Infrastructure.Data;
-using TravelEase.Infrastructure.Services;
-using PaymentMethod = TravelEase.Domain.Enums.PaymentMethod;
+using TravelEase.TravelEase.API.Models;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Features.Booking;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Services;
+using PaymentMethod = TravelEase.TravelEase.Domain.Enums.PaymentMethod;
 
-namespace TravelEase.API.Controllers
+namespace TravelEase.TravelEase.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -124,7 +124,7 @@ namespace TravelEase.API.Controllers
                     SpecialRequests = specialRequests,
                     TotalPrice = totalPrice,
                     PaymentStatus = "Paid",
-                    PaymentMethod = PaymentMethod.Stripe 
+                    PaymentMethod = Domain.Enums.PaymentMethod.Stripe 
                 };
 
                 _context.Bookings.Add(booking);

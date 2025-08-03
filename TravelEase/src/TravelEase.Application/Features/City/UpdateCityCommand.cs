@@ -1,4 +1,4 @@
-﻿namespace TravelEase.Application.Features.City
+﻿namespace TravelEase.TravelEase.Application.Features.City
 {
     public class UpdateCityCommand
     {

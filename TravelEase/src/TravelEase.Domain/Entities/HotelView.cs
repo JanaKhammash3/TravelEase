@@ -1,4 +1,4 @@
-﻿namespace TravelEase.Domain.Entities;
+﻿namespace TravelEase.TravelEase.Domain.Entities;
 
 public class HotelView
 {

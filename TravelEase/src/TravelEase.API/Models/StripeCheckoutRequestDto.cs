@@ -1,4 +1,4 @@
-﻿namespace TravelEase.API.Models;
+﻿namespace TravelEase.TravelEase.API.Models;
 
 public class StripeCheckoutRequestDto
 {

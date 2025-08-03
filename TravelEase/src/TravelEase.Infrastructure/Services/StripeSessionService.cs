@@ -1,7 +1,7 @@
 ﻿using Stripe.Checkout;
-using TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.Infrastructure.Services;
+namespace TravelEase.TravelEase.Infrastructure.Services;
 
 public class StripeSessionService : IStripeSessionService
 {

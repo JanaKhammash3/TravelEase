@@ -1,5 +1,5 @@
 ﻿// RoomDto.cs
-namespace TravelEase.Application.DTOs.Admin;
+namespace TravelEase.TravelEase.Application.DTOs.Admin;
 
 public class AdminRoomDto {
     public int Id { get; set; }

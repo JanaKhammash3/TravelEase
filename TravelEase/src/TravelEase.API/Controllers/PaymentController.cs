@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
-using TravelEase.API.Models;
-using TravelEase.Application.DTOs;
-using TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.API.Models;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.API.Controllers;
+namespace TravelEase.TravelEase.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

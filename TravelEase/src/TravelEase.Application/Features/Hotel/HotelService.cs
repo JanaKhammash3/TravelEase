@@ -1,8 +1,8 @@
-﻿using TravelEase.Application.DTOs;
-using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Entities;
+﻿using TravelEase.TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.Application.Features.Hotel
+namespace TravelEase.TravelEase.Application.Features.Hotel
 {
     public class HotelService : IHotelService
     {
@@ -15,7 +15,7 @@ namespace TravelEase.Application.Features.Hotel
 
         public async Task<List<HotelDto>> GetAllHotelsAsync(int page = 1, int pageSize = 20)
         {
-            var hotels = await _hotelRepository.GetAllAsync(page, pageSize) ?? new List<global::TravelEase.Domain.Entities.Hotel>();
+            var hotels = await _hotelRepository.GetAllAsync(page, pageSize) ?? new List<global::TravelEase.TravelEase.Domain.Entities.Hotel>();
 
             return hotels.Select(h => new HotelDto
             {
@@ -50,7 +50,7 @@ namespace TravelEase.Application.Features.Hotel
 
         public async Task CreateHotelAsync(CreateHotelCommand cmd)
         {
-            var hotel = new global::TravelEase.Domain.Entities.Hotel
+            var hotel = new global::TravelEase.TravelEase.Domain.Entities.Hotel
             {
                 Name = cmd.Name,
                 CityId = cmd.CityId,
@@ -90,7 +90,7 @@ namespace TravelEase.Application.Features.Hotel
         {
             // Null-safe list retrieval with pagination support
             var hotels = await _hotelRepository.GetAllAsync(query.Page, query.PageSize) 
-                         ?? new List<global::TravelEase.Domain.Entities.Hotel>();
+                         ?? new List<global::TravelEase.TravelEase.Domain.Entities.Hotel>();
 
             var filtered = hotels.AsQueryable();
 
@@ -159,7 +159,7 @@ namespace TravelEase.Application.Features.Hotel
 
         public async Task<List<HotelDto>> GetFeaturedHotelsAsync()
         {
-            var hotels = await _hotelRepository.GetFeaturedHotelsAsync() ?? new List<global::TravelEase.Domain.Entities.Hotel>();
+            var hotels = await _hotelRepository.GetFeaturedHotelsAsync() ?? new List<global::TravelEase.TravelEase.Domain.Entities.Hotel>();
 
             return hotels.Select(h => new HotelDto
             {

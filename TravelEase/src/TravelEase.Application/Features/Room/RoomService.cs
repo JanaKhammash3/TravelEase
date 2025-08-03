@@ -1,7 +1,7 @@
-﻿using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Enums;
+﻿using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Enums;
 
-namespace TravelEase.Application.Features.Room
+namespace TravelEase.TravelEase.Application.Features.Room
 {
     public class RoomService
     {

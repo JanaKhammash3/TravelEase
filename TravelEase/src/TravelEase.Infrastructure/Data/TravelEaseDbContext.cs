@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TravelEase.Domain.Entities;
-using TravelEase.Domain.Enums;
+using TravelEase.TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Domain.Enums;
 
-namespace TravelEase.Infrastructure.Data;
+namespace TravelEase.TravelEase.Infrastructure.Data;
 
 public class TravelEaseDbContext : DbContext
 {

@@ -1,10 +1,10 @@
 ﻿using Moq;
-using TravelEase.Application.DTOs;
-using TravelEase.Application.Features.Hotel;
-using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Features.Hotel;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.Tests.UserUnitTests
+namespace TravelEase.TravelEase.Tests.UserUnitTests
 {
     public class HotelServiceTests
     {

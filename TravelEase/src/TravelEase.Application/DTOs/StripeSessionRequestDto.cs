@@ -1,4 +1,4 @@
-﻿namespace TravelEase.Application.DTOs;
+﻿namespace TravelEase.TravelEase.Application.DTOs;
 
 public class StripeSessionRequestDto
 {

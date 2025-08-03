@@ -1,4 +1,4 @@
-﻿namespace TravelEase.Application.Features.Review
+﻿namespace TravelEase.TravelEase.Application.Features.Review
 {
     public class CreateReviewCommand
     {

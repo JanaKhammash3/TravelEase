@@ -2,10 +2,10 @@
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Moq;
-using TravelEase.Application.Interfaces;
-using TravelEase.Infrastructure.Services;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Infrastructure.Services;
 
-namespace TravelEase.Tests.UserUnitTests;
+namespace TravelEase.TravelEase.Tests.UserUnitTests;
 
 public class EmailServiceTests
 {

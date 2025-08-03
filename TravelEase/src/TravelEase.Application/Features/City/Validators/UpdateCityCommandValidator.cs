@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TravelEase.Application.Features.City.Validators
+namespace TravelEase.TravelEase.Application.Features.City.Validators
 {
     public class UpdateCityCommandValidator : AbstractValidator<UpdateCityCommand>
     {

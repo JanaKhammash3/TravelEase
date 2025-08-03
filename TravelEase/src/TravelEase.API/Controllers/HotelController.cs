@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TravelEase.API.Models;
-using TravelEase.Application.Features.Hotel;
-using TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.API.Models;
+using TravelEase.TravelEase.Application.Features.Hotel;
+using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.API.Controllers
+namespace TravelEase.TravelEase.API.Controllers
 {
     [Authorize]
     [ApiController]

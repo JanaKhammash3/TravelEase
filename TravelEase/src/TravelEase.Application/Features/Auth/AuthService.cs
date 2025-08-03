@@ -3,11 +3,11 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using TravelEase.Application.DTOs;
-using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.Application.Features.Auth
+namespace TravelEase.TravelEase.Application.Features.Auth
 {
     public class AuthService : IAuthService
     {

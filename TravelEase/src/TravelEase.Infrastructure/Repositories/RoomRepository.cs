@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.Application.Features.Room;
-using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Entities;
-using TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Application.Features.Room;
+using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Infrastructure.Data;
 
-namespace TravelEase.Infrastructure.Repositories;
+namespace TravelEase.TravelEase.Infrastructure.Repositories;
 
 public class RoomRepository : IRoomRepository
 {

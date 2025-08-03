@@ -1,8 +1,8 @@
 ﻿using QuestPDF.Infrastructure;
-using TravelEase.Application.DTOs;
-using TravelEase.Infrastructure.Services;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Infrastructure.Services;
 
-namespace TravelEase.Tests.UserUnitTests
+namespace TravelEase.TravelEase.Tests.UserUnitTests
 {
     public class PdfReceiptGeneratorTests
     {

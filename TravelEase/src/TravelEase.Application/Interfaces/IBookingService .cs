@@ -1,7 +1,7 @@
-﻿using TravelEase.Application.DTOs;
-using TravelEase.Application.Features.Booking;
+﻿using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Features.Booking;
 
-namespace TravelEase.Application.Interfaces
+namespace TravelEase.TravelEase.Application.Interfaces
 {
     public interface IBookingService
     {

@@ -1,6 +1,6 @@
-﻿using TravelEase.Domain.Enums;
+﻿using TravelEase.TravelEase.Domain.Enums;
 
-namespace TravelEase.Domain.Entities;
+namespace TravelEase.TravelEase.Domain.Entities;
 
 public class Booking
 {

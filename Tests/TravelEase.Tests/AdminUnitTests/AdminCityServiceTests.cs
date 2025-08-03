@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.Application.DTOs.Admin;
-using TravelEase.Domain.Entities;
-using TravelEase.Infrastructure.Data;
-using TravelEase.Infrastructure.Services.Admin;
+using TravelEase.TravelEase.Application.DTOs.Admin;
+using TravelEase.TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Services.Admin;
 
-namespace TravelEase.Tests.AdminUnitTests;
+namespace TravelEase.TravelEase.Tests.AdminUnitTests;
 
 public class AdminCityServiceTests
 {

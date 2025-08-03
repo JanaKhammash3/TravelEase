@@ -1,7 +1,7 @@
-﻿using TravelEase.Application.DTOs;
-using TravelEase.Domain.Entities;
+﻿using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.Application.Interfaces
+namespace TravelEase.TravelEase.Application.Interfaces
 {
     public interface IHotelRepository
     {

@@ -1,6 +1,6 @@
-﻿using TravelEase.Application.Interfaces;
+﻿using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.Application.Features.City
+namespace TravelEase.TravelEase.Application.Features.City
 {
     public class CityService : ICityService
     {
@@ -11,12 +11,12 @@ namespace TravelEase.Application.Features.City
             _cityRepository = cityRepository;
         }
 
-        public async Task<List<global::TravelEase.Domain.Entities.City>> GetAllCitiesAsync()
+        public async Task<List<global::TravelEase.TravelEase.Domain.Entities.City>> GetAllCitiesAsync()
             => await _cityRepository.GetAllAsync();
 
         public async Task CreateCityAsync(CreateCityCommand cmd)
         {
-            var city = new global::TravelEase.Domain.Entities.City
+            var city = new global::TravelEase.TravelEase.Domain.Entities.City
             {
                 Name = cmd.Name,
                 Country = cmd.Country,
@@ -44,7 +44,7 @@ namespace TravelEase.Application.Features.City
             await _cityRepository.UpdateAsync(city);
         }
 
-        public async Task<List<global::TravelEase.Domain.Entities.City>> SearchCitiesAsync(string keyword, int page, int pageSize)
+        public async Task<List<global::TravelEase.TravelEase.Domain.Entities.City>> SearchCitiesAsync(string keyword, int page, int pageSize)
             => await _cityRepository.SearchAsync(keyword, page, pageSize);
     }
 }

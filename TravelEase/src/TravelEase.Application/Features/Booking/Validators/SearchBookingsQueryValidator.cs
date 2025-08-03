@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TravelEase.Application.Features.Booking.Validators
+namespace TravelEase.TravelEase.Application.Features.Booking.Validators
 {
     public class SearchBookingsQueryValidator : AbstractValidator<SearchBookingsQuery>
     {

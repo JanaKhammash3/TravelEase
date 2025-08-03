@@ -1,7 +1,7 @@
-﻿using TravelEase.Application.Features.Room;
-using TravelEase.Domain.Entities;
+﻿using TravelEase.TravelEase.Application.Features.Room;
+using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.Application.Interfaces;
+namespace TravelEase.TravelEase.Application.Interfaces;
 public interface IRoomRepository
 {
     Task<List<Room>> GetAllRoomsAsync();

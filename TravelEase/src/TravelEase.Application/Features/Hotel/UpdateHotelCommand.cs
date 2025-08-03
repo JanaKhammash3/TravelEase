@@ -1,4 +1,4 @@
-﻿namespace TravelEase.Application.Features.Hotel
+﻿namespace TravelEase.TravelEase.Application.Features.Hotel
 {
     public class UpdateHotelCommand
     {

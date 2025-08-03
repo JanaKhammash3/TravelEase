@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using TravelEase.Application.DTOs;
-using TravelEase.Application.Features.Booking;
-using TravelEase.Domain.Entities;
+using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.TravelEase.Application.Features.Booking;
+using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.Application.Interfaces
+namespace TravelEase.TravelEase.Application.Interfaces
 {
     public interface IBookingRepository
     {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TravelEase.Application.Features.Review.Validators
+namespace TravelEase.TravelEase.Application.Features.Review.Validators
 {
     public class CreateReviewCommandValidator : AbstractValidator<CreateReviewCommand>
     {

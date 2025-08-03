@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace TravelEase.Infrastructure.Data
+namespace TravelEase.TravelEase.Infrastructure.Data
 {
     public class TravelEaseDbContextFactory : IDesignTimeDbContextFactory<TravelEaseDbContext>
     {

@@ -1,7 +1,7 @@
-﻿using TravelEase.Application.Features.City;
-using TravelEase.Domain.Entities;
+﻿using TravelEase.TravelEase.Application.Features.City;
+using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.Application.Interfaces
+namespace TravelEase.TravelEase.Application.Interfaces
 {
     public interface ICityService
     {

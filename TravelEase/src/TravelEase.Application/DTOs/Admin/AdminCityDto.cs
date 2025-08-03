@@ -1,5 +1,5 @@
 ﻿// CityDto.cs
-namespace TravelEase.Application.DTOs.Admin;
+namespace TravelEase.TravelEase.Application.DTOs.Admin;
 
 public class AdminCityDto {
     public int Id { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace TravelEase.Domain.Enums
+﻿namespace TravelEase.TravelEase.Domain.Enums
 {
     public enum PaymentMethod
     {

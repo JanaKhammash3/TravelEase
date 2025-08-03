@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace TravelEase.Infrastructure.Migrations
+namespace TravelEase.TravelEase.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddHotelImages : Migration

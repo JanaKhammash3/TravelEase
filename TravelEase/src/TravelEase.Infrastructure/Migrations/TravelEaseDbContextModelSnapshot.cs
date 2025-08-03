@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Data;
 
 #nullable disable
 
-namespace TravelEase.Infrastructure.Migrations
+namespace TravelEase.TravelEase.Infrastructure.Migrations
 {
     [DbContext(typeof(TravelEaseDbContext))]
     partial class TravelEaseDbContextModelSnapshot : ModelSnapshot

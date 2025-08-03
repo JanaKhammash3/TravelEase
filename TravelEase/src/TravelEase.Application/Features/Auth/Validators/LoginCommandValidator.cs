@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TravelEase.Application.Features.Auth.Validators
+namespace TravelEase.TravelEase.Application.Features.Auth.Validators
 {
     public class LoginCommandValidator : AbstractValidator<LoginCommand>
     {

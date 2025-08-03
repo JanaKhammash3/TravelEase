@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TravelEase.Infrastructure.Data;
+using TravelEase.TravelEase.Infrastructure.Data;
 
 #nullable disable
 
-namespace TravelEase.Infrastructure.Migrations
+namespace TravelEase.TravelEase.Infrastructure.Migrations
 {
     [DbContext(typeof(TravelEaseDbContext))]
     [Migration("20250718231746_UpdateHotelSchema")]
