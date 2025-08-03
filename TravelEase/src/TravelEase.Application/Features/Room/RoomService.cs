@@ -1,5 +1,4 @@
-﻿using TravelEase.Application.Interfaces;
-using TravelEase.Domain.Enums;
+﻿using TravelEase.Domain.Enums;
 using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Application.Features.Room
