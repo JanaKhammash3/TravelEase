@@ -1,9 +1,9 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Application.Interfaces;
-using System.Threading.Tasks;
 
-namespace TravelEase.TravelEase.Infrastructure.Services
+namespace TravelEase.Infrastructure.Services
 {
     public class CloudinaryWrapper : ICloudinaryWrapper
     {

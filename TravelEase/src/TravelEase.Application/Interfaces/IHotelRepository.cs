@@ -1,11 +1,11 @@
-﻿using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Domain.Entities;
+﻿using TravelEase.Application.DTOs;
+using TravelEase.Domain.Entities;
 
 namespace TravelEase.TravelEase.Application.Interfaces
 {
     public interface IHotelRepository
     {
-        Task<List<Hotel>> GetAllAsync();
+        Task<List<Hotel>> GetAllAsync(int page = 1, int pageSize = 20);
         Task<Hotel?> GetByIdAsync(int id);
         Task AddAsync(Hotel hotel);
         Task UpdateAsync(Hotel hotel);
@@ -16,6 +16,6 @@ namespace TravelEase.TravelEase.Application.Interfaces
         Task<List<HotelDto>> GetRecentlyVisitedHotelsAsync(int userId, int count = 5);
         Task<List<TrendingCityDto>> GetTrendingCitiesAsync(int count = 5);
         Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls);
-
     }
+
 }

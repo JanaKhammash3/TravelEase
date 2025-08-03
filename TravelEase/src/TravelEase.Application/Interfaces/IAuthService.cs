@@ -1,5 +1,5 @@
-﻿using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Application.Features.Auth;
+﻿using TravelEase.Application.DTOs;
+using TravelEase.Application.Features.Auth;
 
 namespace TravelEase.TravelEase.Application.Interfaces
 {

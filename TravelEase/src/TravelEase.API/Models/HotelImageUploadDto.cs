@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace TravelEase.TravelEase.API.Models
+﻿namespace TravelEase.API.Models
 {
     public class HotelImageUploadDto
     {

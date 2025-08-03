@@ -1,4 +1,4 @@
-﻿namespace TravelEase.TravelEase.Domain.Entities;
+﻿namespace TravelEase.Domain.Entities;
 
 public class City
 {

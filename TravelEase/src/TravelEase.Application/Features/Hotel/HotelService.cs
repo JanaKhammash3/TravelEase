@@ -1,8 +1,9 @@
-﻿using TravelEase.TravelEase.Application.DTOs;
+﻿using TravelEase.Application.DTOs;
+using TravelEase.Application.Interfaces;
+using TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.TravelEase.Application.Features.Hotel
+namespace TravelEase.Application.Features.Hotel
 {
     public class HotelService : IHotelService
     {
@@ -13,9 +14,9 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
             _hotelRepository = hotelRepository;
         }
 
-        public async Task<List<HotelDto>> GetAllHotelsAsync()
+        public async Task<List<HotelDto>> GetAllHotelsAsync(int page = 1, int pageSize = 20)
         {
-            var hotels = await _hotelRepository.GetAllAsync();
+            var hotels = await _hotelRepository.GetAllAsync(page, pageSize) ?? new List<global::TravelEase.Domain.Entities.Hotel>();
 
             return hotels.Select(h => new HotelDto
             {
@@ -23,15 +24,12 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                 Name = h.Name,
                 City = h.City?.Name ?? "",
                 StarRating = h.StarRating,
-                Price = h.Rooms.Any()
-                    ? h.Rooms.Min(r => r.PricePerNight)
-                    : 0,
-                ThumbnailUrl = h.Images.FirstOrDefault()?.ImageUrl ?? "", // Use first uploaded image
+                Price = h.Rooms.Any() ? h.Rooms.Min(r => r.PricePerNight) : 0,
+                ThumbnailUrl = h.Images.FirstOrDefault()?.ImageUrl ?? "",
                 Latitude = h.Latitude,
                 Longitude = h.Longitude
             }).ToList();
         }
-
 
         public async Task<HotelDto?> GetHotelDtoByIdAsync(int id)
         {
@@ -51,10 +49,9 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
             };
         }
 
-
         public async Task CreateHotelAsync(CreateHotelCommand cmd)
         {
-            var hotel = new Domain.Entities.Hotel
+            var hotel = new global::TravelEase.Domain.Entities.Hotel
             {
                 Name = cmd.Name,
                 CityId = cmd.CityId,
@@ -62,7 +59,7 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                 Location = cmd.Location,
                 StarRating = cmd.StarRating,
                 Description = cmd.Description,
-                Amenities = "" // default to avoid null insert errors
+                Amenities = "" // avoid null insert errors
             };
 
             await _hotelRepository.AddAsync(hotel);
@@ -92,7 +89,10 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
 
         public async Task<List<HotelDto>> SearchHotelsAsync(SearchHotelsQuery query)
         {
-            var hotels = await _hotelRepository.GetAllAsync();
+            // Null-safe list retrieval with pagination support
+            var hotels = await _hotelRepository.GetAllAsync(query.Page, query.PageSize) 
+                         ?? new List<global::TravelEase.Domain.Entities.Hotel>();
+
             var filtered = hotels.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.Name))
@@ -141,7 +141,7 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                 );
             }
 
-            var result = filtered
+            return filtered
                 .Skip((query.Page - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .Select(h => new HotelDto
@@ -156,13 +156,11 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                     Longitude = h.Longitude
                 })
                 .ToList();
-
-            return result;
         }
 
         public async Task<List<HotelDto>> GetFeaturedHotelsAsync()
         {
-            var hotels = await _hotelRepository.GetFeaturedHotelsAsync();
+            var hotels = await _hotelRepository.GetFeaturedHotelsAsync() ?? new List<global::TravelEase.Domain.Entities.Hotel>();
 
             return hotels.Select(h => new HotelDto
             {
@@ -184,12 +182,12 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
 
         public async Task<List<HotelDto>> GetRecentlyVisitedHotelsAsync(int userId, int count = 5)
         {
-            return await _hotelRepository.GetRecentlyVisitedHotelsAsync(userId, count);
+            return await _hotelRepository.GetRecentlyVisitedHotelsAsync(userId, count) ?? new List<HotelDto>();
         }
 
         public async Task<List<TrendingCityDto>> GetTrendingCitiesAsync(int count = 5)
         {
-            return await _hotelRepository.GetTrendingCitiesAsync(count);
+            return await _hotelRepository.GetTrendingCitiesAsync(count) ?? new List<TrendingCityDto>();
         }
 
         public async Task<List<string>> UploadImagesAsync(int hotelId, List<(string FileName, Stream Content)> files)
@@ -204,8 +202,6 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
-            var newImages = new List<HotelImage>();
-
             foreach (var file in files)
             {
                 var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
@@ -217,21 +213,12 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                 }
 
                 var imageUrl = $"/hotel-images/{newFileName}";
-
-                newImages.Add(new HotelImage
-                {
-                    HotelId = hotel.Id,
-                    ImageUrl = imageUrl
-                });
-
                 imageUrls.Add(imageUrl);
             }
 
-            // Save all new image entities to DB
             await _hotelRepository.SaveHotelImageUrlsAsync(hotelId, imageUrls);
             return imageUrls;
         }
-
 
         public async Task SaveHotelImageUrlsAsync(int hotelId, List<string> urls)
         {

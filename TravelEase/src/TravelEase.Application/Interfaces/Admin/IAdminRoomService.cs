@@ -1,6 +1,6 @@
-﻿using TravelEase.TravelEase.Application.DTOs.Admin;
+﻿using TravelEase.Application.DTOs.Admin;
 
-namespace TravelEase.TravelEase.Application.Interfaces.Admin;
+namespace TravelEase.Application.Interfaces.Admin;
 
 public interface IAdminRoomService
 {

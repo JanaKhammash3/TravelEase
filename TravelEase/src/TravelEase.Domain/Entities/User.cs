@@ -1,6 +1,6 @@
-﻿using TravelEase.TravelEase.Domain.Enums;
+﻿using TravelEase.Domain.Enums;
 
-namespace TravelEase.TravelEase.Domain.Entities;
+namespace TravelEase.Domain.Entities;
 
 public class User
 {

@@ -1,6 +1,6 @@
-﻿using TravelEase.TravelEase.Domain.Enums;
+﻿using TravelEase.Domain.Enums;
 
-namespace TravelEase.TravelEase.Application.Features.Room
+namespace TravelEase.Application.Features.Room
 {
     public class CreateRoomCommand
     {

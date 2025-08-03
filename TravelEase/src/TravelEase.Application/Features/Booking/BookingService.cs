@@ -1,9 +1,8 @@
-﻿using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Application.Features.Booking;
+﻿using TravelEase.Application.DTOs;
+using TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.TravelEase.Application.Features.Booking
+namespace TravelEase.Application.Features.Booking
 {
     public class BookingService : IBookingService
     {
@@ -37,7 +36,7 @@ namespace TravelEase.TravelEase.Application.Features.Booking
             if (!isAvailable)
                 throw new Exception(" Room is not available for the selected dates");
 
-            var booking = new Domain.Entities.Booking
+            var booking = new global::TravelEase.Domain.Entities.Booking
             {
                 UserId = cmd.UserId,
                 RoomId = cmd.RoomId,

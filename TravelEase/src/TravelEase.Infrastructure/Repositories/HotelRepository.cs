@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TravelEase.Application.DTOs;
+using TravelEase.Application.Interfaces;
+using TravelEase.Domain.Entities;
+using TravelEase.Infrastructure.Data;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Infrastructure.Data;
-using TravelEase.TravelEase.Application.DTOs;
-using System.Linq;
 
-namespace TravelEase.TravelEase.Infrastructure.Repositories
+namespace TravelEase.Infrastructure.Repositories
 {
     public class HotelRepository : IHotelRepository
     {
@@ -16,14 +16,17 @@ namespace TravelEase.TravelEase.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Hotel>> GetAllAsync()
+        public async Task<List<Hotel>> GetAllAsync(int page = 1, int pageSize = 20)
         {
             return await _context.Hotels
                 .Include(h => h.City)
                 .Include(h => h.Rooms)
-                .Include(h => h.Images) 
+                .Include(h => h.Images)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
+
 
 
 

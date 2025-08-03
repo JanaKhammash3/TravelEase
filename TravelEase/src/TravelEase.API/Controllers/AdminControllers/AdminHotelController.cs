@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TravelEase.TravelEase.Application.DTOs.Admin;
+using TravelEase.Application.DTOs.Admin;
+using TravelEase.Application.Interfaces.Admin;
 
-namespace TravelEase.TravelEase.API.Controllers.AdminControllers;
+namespace TravelEase.API.Controllers.AdminControllers;
 
 [ApiController]
 [Route("api/admin/hotels")]

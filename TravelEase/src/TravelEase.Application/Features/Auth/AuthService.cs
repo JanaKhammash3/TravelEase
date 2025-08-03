@@ -1,13 +1,14 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using TravelEase.TravelEase.Application.DTOs;
+using Microsoft.IdentityModel.Tokens;
+using TravelEase.Application.DTOs;
+using TravelEase.Application.Interfaces;
+using TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Domain.Entities;
 
-namespace TravelEase.TravelEase.Application.Features.Auth
+namespace TravelEase.Application.Features.Auth
 {
     public class AuthService : IAuthService
     {

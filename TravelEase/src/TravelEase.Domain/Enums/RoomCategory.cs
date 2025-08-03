@@ -1,4 +1,4 @@
-﻿namespace TravelEase.TravelEase.Domain.Enums;
+﻿namespace TravelEase.Domain.Enums;
 
 public enum RoomCategory
 {

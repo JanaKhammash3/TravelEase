@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Application.Features.Booking;
-using TravelEase.TravelEase.Domain.Entities;
+using TravelEase.Application.DTOs;
+using TravelEase.Application.Features.Booking;
+using TravelEase.Domain.Entities;
 
 namespace TravelEase.TravelEase.Application.Interfaces
 {

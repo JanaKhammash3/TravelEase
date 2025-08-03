@@ -1,10 +1,8 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-using System.IO;
-using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.Application.DTOs;
 
-namespace TravelEase.TravelEase.Infrastructure.Services
+namespace TravelEase.Infrastructure.Services
 {
     public static class PdfReceiptGenerator
     {

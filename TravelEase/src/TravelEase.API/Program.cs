@@ -6,27 +6,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
-using TravelEase.TravelEase.Application.Features.Auth;
-using TravelEase.TravelEase.Application.Features.Booking;
-using TravelEase.TravelEase.Application.Features.City;
-using TravelEase.TravelEase.Application.Features.Hotel;
-using TravelEase.TravelEase.Application.Features.Review;
-using TravelEase.TravelEase.Application.Features.Room;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
+using TravelEase.API.Middleware;
+using TravelEase.Application.Behaviors;
+using TravelEase.Application.Features.Hotel.Validators;
+using TravelEase.Application.Features.Hotel;
+using TravelEase.Infrastructure.Data;
+using TravelEase.Infrastructure.Repositories;
+using TravelEase.Infrastructure.Services;
+using TravelEase.Application.Interfaces;
+using TravelEase.Application.Interfaces.Admin;
+using TravelEase.Infrastructure.Services.Admin;
+using TravelEase.Application.Features.Auth;
+using TravelEase.Application.Features.Booking;
+using TravelEase.Application.Features.City;
+using TravelEase.Application.Features.Review;
+using TravelEase.Application.Features.Room;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Interfaces.Admin;
-using TravelEase.TravelEase.Infrastructure.Data;
-using TravelEase.TravelEase.Infrastructure.Repositories;
-using TravelEase.TravelEase.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
-using TravelEase.TravelEase.API.Middleware;
-using TravelEase.TravelEase.Infrastructure.Services.Admin;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-{
-    Args = args,
-    ContentRootPath = Directory.GetCurrentDirectory(),
-    EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
-});
+// ==========================
+// Create Builder
+// ==========================
+var builder = WebApplication.CreateBuilder(args);
 
 // ==========================
 // Load .env if it exists
@@ -42,7 +45,7 @@ if (File.Exists(envPath))
 Console.WriteLine($"ENV: {builder.Environment.EnvironmentName}");
 
 // ==========================
-// Config loading (supports Docker, env vars, and user secrets)
+// Config loading
 // ==========================
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -52,14 +55,24 @@ builder.Configuration
     .AddUserSecrets<Program>(optional: true);
 
 // ==========================
-// Set QuestPDF license (Community Edition)
+// Set QuestPDF license
 // ==========================
 QuestPDF.Settings.License = LicenseType.Community;
 
 // ==========================
-// Add Services
+// Add Controllers + FluentValidation
 // ==========================
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(fv =>
+    {
+        fv.RegisterValidatorsFromAssemblyContaining<CreateHotelCommandValidator>();
+    });
+
+// ==========================
+// Add MediatR + Validation Behavior
+// ==========================
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateHotelCommand).Assembly));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // ==========================
 // JWT Configuration

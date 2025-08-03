@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 
-namespace TravelEase.TravelEase.Infrastructure.Data
+namespace TravelEase.Infrastructure.Data
 {
     public class TravelEaseDbContextFactory : IDesignTimeDbContextFactory<TravelEaseDbContext>
     {

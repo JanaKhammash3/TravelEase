@@ -1,8 +1,9 @@
 ﻿using System.Net.Mail;
-using TravelEase.TravelEase.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
+using TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.TravelEase.Infrastructure.Services;
+namespace TravelEase.Infrastructure.Services;
 
 public class EmailService : IEmailService
 {

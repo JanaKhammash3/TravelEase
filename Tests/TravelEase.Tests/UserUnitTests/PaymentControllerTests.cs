@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using TravelEase.TravelEase.API.Controllers;
-using TravelEase.TravelEase.API.Models;
-using TravelEase.TravelEase.Application.DTOs;
+using TravelEase.API.Controllers;
+using TravelEase.API.Models;
+using TravelEase.Application.DTOs;
+using TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Tests.UserUnitTests;

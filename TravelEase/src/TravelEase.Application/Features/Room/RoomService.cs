@@ -1,7 +1,8 @@
-﻿using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Domain.Enums;
+﻿using TravelEase.Application.Interfaces;
+using TravelEase.Domain.Enums;
+using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.TravelEase.Application.Features.Room
+namespace TravelEase.Application.Features.Room
 {
     public class RoomService
     {
@@ -12,19 +13,19 @@ namespace TravelEase.TravelEase.Application.Features.Room
             _roomRepository = roomRepository;
         }
 
-        public async Task<List<TravelEase.Domain.Entities.Room>> GetAllRoomsAsync()
+        public async Task<List<Domain.Entities.Room>> GetAllRoomsAsync()
         {
             return await _roomRepository.GetAllRoomsAsync();
         }
 
-        public async Task<TravelEase.Domain.Entities.Room?> GetRoomByIdAsync(int id)
+        public async Task<Domain.Entities.Room?> GetRoomByIdAsync(int id)
         {
             return await _roomRepository.GetRoomByIdAsync(id);
         }
 
         public async Task CreateRoomAsync(CreateRoomCommand cmd)
         {
-            var room = new TravelEase.Domain.Entities.Room
+            var room = new Domain.Entities.Room
             {
                 Number = cmd.Number,
                 CapacityAdults = cmd.CapacityAdults,
@@ -59,7 +60,7 @@ namespace TravelEase.TravelEase.Application.Features.Room
             await _roomRepository.UpdateRoomAsync(room);
         }
 
-        public async Task<IEnumerable<TravelEase.Domain.Entities.Room>> SearchRoomsAsync(SearchRoomsQuery query)
+        public async Task<IEnumerable<Domain.Entities.Room>> SearchRoomsAsync(SearchRoomsQuery query)
         {
             return await _roomRepository.SearchRoomsAsync(query);
         }

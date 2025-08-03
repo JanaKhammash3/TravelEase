@@ -1,4 +1,4 @@
-﻿namespace TravelEase.TravelEase.Application.DTOs.Admin;
+﻿namespace TravelEase.Application.DTOs.Admin;
 
 public class AdminHotelDto
 {

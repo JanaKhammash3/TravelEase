@@ -1,5 +1,4 @@
 ﻿using CloudinaryDotNet.Actions;
-using System.Threading.Tasks;
 
 namespace TravelEase.TravelEase.Application.Interfaces
 {

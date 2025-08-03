@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.Infrastructure.Data;
 
 #nullable disable
 

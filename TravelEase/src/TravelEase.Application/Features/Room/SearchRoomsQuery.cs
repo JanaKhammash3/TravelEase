@@ -1,4 +1,4 @@
-﻿namespace TravelEase.TravelEase.Application.Features.Room
+﻿namespace TravelEase.Application.Features.Room
 {
     public class SearchRoomsQuery
     {
@@ -14,5 +14,7 @@
         public int? NumRooms { get; set; }
         public int? Adults { get; set; }
         public int? Children { get; set; }
+        public int Page { get; set; } = 1;
+        public int PageSize { get; set; } = 20;
     }
 }

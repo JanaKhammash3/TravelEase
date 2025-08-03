@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Moq;
-using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Application.Features.Booking;
+using TravelEase.Application.DTOs;
+using TravelEase.Application.Features.Booking;
+using TravelEase.Application.Interfaces;
+using TravelEase.Domain.Entities;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Domain.Entities;
 
 namespace TravelEase.Tests.UserUnitTests;
 

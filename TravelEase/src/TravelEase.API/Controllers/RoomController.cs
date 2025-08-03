@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TravelEase.TravelEase.Application.Features.Room;
+using TravelEase.Application.Features.Room;
 
-namespace TravelEase.TravelEase.API.Controllers
+namespace TravelEase.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

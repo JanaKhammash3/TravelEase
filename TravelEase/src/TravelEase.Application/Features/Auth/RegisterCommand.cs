@@ -1,4 +1,4 @@
-﻿namespace TravelEase.TravelEase.Application.Features.Auth;
+﻿namespace TravelEase.Application.Features.Auth;
 
 public class RegisterCommand
 {

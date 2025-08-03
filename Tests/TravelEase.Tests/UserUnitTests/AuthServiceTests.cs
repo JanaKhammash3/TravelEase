@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Moq;
-using TravelEase.TravelEase.Application.Features.Auth;
+using TravelEase.Application.Features.Auth;
+using TravelEase.Application.Interfaces;
+using TravelEase.Domain.Entities;
+using TravelEase.Domain.Enums;
 using TravelEase.TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Domain.Enums;
 
 namespace TravelEase.Tests.UserUnitTests;
 

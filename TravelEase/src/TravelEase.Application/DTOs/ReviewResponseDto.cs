@@ -1,4 +1,4 @@
-﻿namespace TravelEase.TravelEase.Application.DTOs
+﻿namespace TravelEase.Application.DTOs
 {
     public class ReviewResponseDto
     {

@@ -1,12 +1,11 @@
-﻿using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Application.Features.Hotel;
-using TravelEase.TravelEase.Domain.Entities;
+﻿using TravelEase.Application.DTOs;
+using TravelEase.Application.Features.Hotel;
 
 namespace TravelEase.TravelEase.Application.Interfaces;
 
 public interface IHotelService
 {
-    Task<List<HotelDto>> GetAllHotelsAsync();
+    Task<List<HotelDto>> GetAllHotelsAsync(int page = 1, int pageSize = 20);
     Task<HotelDto?> GetHotelDtoByIdAsync(int id);
     Task CreateHotelAsync(CreateHotelCommand cmd);
     Task UpdateHotelAsync(UpdateHotelCommand cmd);

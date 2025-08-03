@@ -1,6 +1,5 @@
-﻿using TravelEase.TravelEase.Application.DTOs;
-using TravelEase.TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Application.Features.Booking;
+﻿using TravelEase.Application.DTOs;
+using TravelEase.Application.Features.Booking;
 
 namespace TravelEase.TravelEase.Application.Interfaces
 {

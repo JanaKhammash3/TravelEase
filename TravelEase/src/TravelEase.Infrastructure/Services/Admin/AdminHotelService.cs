@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TravelEase.TravelEase.Application.DTOs.Admin;
-using TravelEase.TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Infrastructure.Data;
+using TravelEase.Application.DTOs.Admin;
+using TravelEase.Application.Interfaces.Admin;
+using TravelEase.Domain.Entities;
+using TravelEase.Infrastructure.Data;
 
-namespace TravelEase.TravelEase.Infrastructure.Services.Admin;
+namespace TravelEase.Infrastructure.Services.Admin;
 
 public class AdminHotelService : IAdminHotelService
 {

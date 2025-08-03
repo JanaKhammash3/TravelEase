@@ -1,9 +1,10 @@
 ﻿using CloudinaryDotNet;
-using Microsoft.AspNetCore.Http;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
+using TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Application.Interfaces;
 
-namespace TravelEase.TravelEase.Infrastructure.Services
+namespace TravelEase.Infrastructure.Services
 {
     public class CloudinaryImageService : IImageUploader
     {

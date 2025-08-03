@@ -1,13 +1,14 @@
-﻿using TravelEase.TravelEase.Application.Features.City;
+﻿using TravelEase.Application.Features.City;
+using TravelEase.Domain.Entities;
 
 namespace TravelEase.TravelEase.Application.Interfaces
 {
     public interface ICityService
     {
-        Task<List<Domain.Entities.City>> GetAllCitiesAsync();
+        Task<List<City>> GetAllCitiesAsync();
         Task CreateCityAsync(CreateCityCommand cmd);
         Task DeleteCityAsync(int id);
         Task UpdateCityAsync(UpdateCityCommand cmd);
-        Task<List<Domain.Entities.City>> SearchCitiesAsync(string keyword, int page, int pageSize);
+        Task<List<City>> SearchCitiesAsync(string keyword, int page, int pageSize);
     }
 }
