@@ -5,7 +5,6 @@ using TravelEase.Application.Features.Booking;
 using TravelEase.Application.Interfaces;
 using TravelEase.Domain.Entities;
 using TravelEase.Infrastructure.Data;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Infrastructure.Repositories
 {

@@ -9,7 +9,6 @@ using TravelEase.Application.Interfaces;
 using TravelEase.Domain.Entities;
 using TravelEase.Infrastructure.Data;
 using TravelEase.Infrastructure.Services;
-using TravelEase.TravelEase.Application.Interfaces;
 using PaymentMethod = TravelEase.Domain.Enums.PaymentMethod;
 
 namespace TravelEase.API.Controllers

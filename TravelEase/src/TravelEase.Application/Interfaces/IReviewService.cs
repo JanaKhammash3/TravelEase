@@ -1,6 +1,6 @@
 ﻿using TravelEase.Application.DTOs;
 
-namespace TravelEase.TravelEase.Application.Interfaces;
+namespace TravelEase.Application.Interfaces;
 public interface IReviewService
 {
     Task CreateReviewAsync(ReviewDto dto);

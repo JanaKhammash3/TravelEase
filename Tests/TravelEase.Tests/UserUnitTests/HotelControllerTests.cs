@@ -5,7 +5,6 @@ using Moq;
 using TravelEase.API.Controllers;
 using TravelEase.API.Models;
 using TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Tests.UserUnitTests;
 

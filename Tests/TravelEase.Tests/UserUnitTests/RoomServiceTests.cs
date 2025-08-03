@@ -3,7 +3,6 @@ using TravelEase.Application.Features.Room;
 using TravelEase.Application.Interfaces;
 using TravelEase.Domain.Entities;
 using TravelEase.Domain.Enums;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Tests.UserUnitTests;
 

@@ -3,7 +3,7 @@ using TravelEase.Application.DTOs;
 using TravelEase.Application.Features.Booking;
 using TravelEase.Domain.Entities;
 
-namespace TravelEase.TravelEase.Application.Interfaces
+namespace TravelEase.Application.Interfaces
 {
     public interface IBookingRepository
     {

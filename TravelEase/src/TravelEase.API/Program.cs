@@ -24,7 +24,6 @@ using TravelEase.Application.Features.Booking;
 using TravelEase.Application.Features.City;
 using TravelEase.Application.Features.Review;
 using TravelEase.Application.Features.Room;
-using TravelEase.TravelEase.Application.Interfaces;
 
 // ==========================
 // Create Builder

@@ -2,7 +2,6 @@
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Infrastructure.Services
 {

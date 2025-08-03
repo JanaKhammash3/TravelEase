@@ -1,6 +1,5 @@
 ﻿using Stripe.Checkout;
 using TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Infrastructure.Services;
 

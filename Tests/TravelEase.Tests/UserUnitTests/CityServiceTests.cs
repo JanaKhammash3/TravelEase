@@ -2,7 +2,6 @@
 using TravelEase.Application.Features.City;
 using TravelEase.Application.Interfaces;
 using TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Tests.UserUnitTests;
 

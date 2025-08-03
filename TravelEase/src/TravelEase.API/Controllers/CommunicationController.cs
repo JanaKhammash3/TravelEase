@@ -2,7 +2,6 @@
 using TravelEase.Application.DTOs;
 using TravelEase.Application.Interfaces;
 using TravelEase.Infrastructure.Services;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.API.Controllers
 {

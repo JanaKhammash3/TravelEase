@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using TravelEase.API.Models;
 using TravelEase.Application.Features.Hotel;
 using TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.API.Controllers
 {

@@ -3,7 +3,6 @@ using Stripe.Checkout;
 using TravelEase.API.Models;
 using TravelEase.Application.DTOs;
 using TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.API.Controllers;
 

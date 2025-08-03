@@ -1,7 +1,7 @@
 ﻿using TravelEase.Application.DTOs;
 using TravelEase.Application.Features.Auth;
 
-namespace TravelEase.TravelEase.Application.Interfaces
+namespace TravelEase.Application.Interfaces
 {
     public interface IAuthService
     {

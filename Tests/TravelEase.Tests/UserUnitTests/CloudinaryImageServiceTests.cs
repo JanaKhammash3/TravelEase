@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Moq;
 using TravelEase.Application.Interfaces;
 using TravelEase.Infrastructure.Services;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Tests.UserUnitTests
 {

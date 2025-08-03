@@ -1,7 +1,6 @@
 ﻿using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using TravelEase.Application.Interfaces;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Infrastructure.Services;
 

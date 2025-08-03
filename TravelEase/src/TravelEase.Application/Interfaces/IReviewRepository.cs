@@ -1,6 +1,6 @@
 ﻿using TravelEase.Domain.Entities;
 
-namespace TravelEase.TravelEase.Application.Interfaces;
+namespace TravelEase.Application.Interfaces;
 
 public interface IReviewRepository
 {

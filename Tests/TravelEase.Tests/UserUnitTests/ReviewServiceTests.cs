@@ -3,7 +3,6 @@ using TravelEase.Application.DTOs;
 using TravelEase.Application.Features.Review;
 using TravelEase.Application.Interfaces;
 using TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.Tests.UserUnitTests;
 
