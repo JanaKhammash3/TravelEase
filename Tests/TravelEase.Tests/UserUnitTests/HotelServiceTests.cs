@@ -3,8 +3,9 @@ using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Interfaces;
 using TravelEase.TravelEase.Domain.Entities;
+using Xunit;
 
-namespace TravelEase.Tests.UserUnitTests
+namespace TravelEase.TravelEase.Tests.UserUnitTests
 {
     public class HotelServiceTests
     {
@@ -76,8 +77,8 @@ namespace TravelEase.Tests.UserUnitTests
             _hotelRepoMock.Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(new List<Hotel>
                 {
-                    new Hotel { Name = "Test Hotel 1", City = new City { Name = "Paris" }, Rooms = new List<Room>{ new Room{ PricePerNight = 100 } } },
-                    new Hotel { Name = "Test Hotel 2", City = new City { Name = "London" }, Rooms = new List<Room>{ new Room{ PricePerNight = 200 } } }
+                    new Hotel(),
+                    new Hotel()
                 });
 
             var result = await _service.GetAllHotelsAsync(1, 20);
@@ -103,16 +104,16 @@ namespace TravelEase.Tests.UserUnitTests
             var query = new SearchHotelsQuery { Name = "test", Page = 1, PageSize = 10 };
 
             _hotelRepoMock.Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
-                          .ReturnsAsync(new List<Hotel>
-                          {
-                              new Hotel
-                              {
-                                  Name = "Test Hotel",
-                                  StarRating = 4,
-                                  City = new City { Name = "Paris" },
-                                  Rooms = new List<Room> { new() { PricePerNight = 100 } }
-                              }
-                          });
+                .ReturnsAsync(new List<Hotel>
+                {
+                    new Hotel
+                    {
+                        Name = "Test Hotel",
+                        StarRating = 4,
+                        City = new City { Name = "Paris" },
+                        Rooms = new List<Room> { new() { PricePerNight = 100 } }
+                    }
+                });
 
             var result = await _service.SearchHotelsAsync(query);
 
@@ -123,7 +124,8 @@ namespace TravelEase.Tests.UserUnitTests
         [Fact(DisplayName = "Get featured hotels")]
         public async Task GetFeaturedHotelsAsync_ShouldReturnList()
         {
-            _hotelRepoMock.Setup(r => r.GetFeaturedHotelsAsync()).ReturnsAsync(new List<Hotel> { new Hotel() });
+            _hotelRepoMock.Setup(r => r.GetFeaturedHotelsAsync())
+                .ReturnsAsync(new List<Hotel> { new Hotel() });
 
             var result = await _service.GetFeaturedHotelsAsync();
 
@@ -141,7 +143,7 @@ namespace TravelEase.Tests.UserUnitTests
         public async Task GetRecentlyVisitedHotelsAsync_ShouldReturnRecent()
         {
             _hotelRepoMock.Setup(r => r.GetRecentlyVisitedHotelsAsync(1, 5))
-                          .ReturnsAsync(new List<HotelDto> { new() });
+                .ReturnsAsync(new List<HotelDto> { new() });
 
             var result = await _service.GetRecentlyVisitedHotelsAsync(1);
 
@@ -152,7 +154,7 @@ namespace TravelEase.Tests.UserUnitTests
         public async Task GetTrendingCitiesAsync_ShouldReturnList()
         {
             _hotelRepoMock.Setup(r => r.GetTrendingCitiesAsync(5))
-                          .ReturnsAsync(new List<TrendingCityDto> { new() });
+                .ReturnsAsync(new List<TrendingCityDto> { new() });
 
             var result = await _service.GetTrendingCitiesAsync();
 
@@ -165,9 +167,9 @@ namespace TravelEase.Tests.UserUnitTests
             var hotel = new Hotel { Id = 1, Images = new List<HotelImage>() };
             _hotelRepoMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(hotel);
             _hotelRepoMock.Setup(r => r.SaveHotelImageUrlsAsync(1, It.IsAny<List<string>>()))
-                          .Returns(Task.CompletedTask);
+                .Returns(Task.CompletedTask);
 
-            var mockStream = new MemoryStream(new byte[] { 0x1, 0x2, 0x3 });
+            using var mockStream = new MemoryStream(new byte[] { 0x1, 0x2, 0x3 });
             var files = new List<(string FileName, Stream Content)>
             {
                 ("test.jpg", mockStream)
