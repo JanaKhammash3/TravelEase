@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TravelEase.TravelEase.API.Models;
 using TravelEase.TravelEase.Application.Features.Hotel;
 using TravelEase.TravelEase.Application.Interfaces;
+using TravelEase.TravelEase.API.Models;
+using TravelEase.TravelEase.Application.DTOs;
 
 namespace TravelEase.TravelEase.API.Controllers
 {
@@ -22,12 +23,11 @@ namespace TravelEase.TravelEase.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllHotels([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        public async Task<IActionResult> GetAllHotels()
         {
-            var result = await _hotelService.GetAllHotelsAsync(page, pageSize);
-            return Ok(result);
+            var hotels = await _hotelService.GetAllHotelsAsync();
+            return Ok(hotels);
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHotelById(int id)
