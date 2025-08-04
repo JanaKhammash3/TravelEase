@@ -73,12 +73,29 @@ namespace TravelEase.Tests.UserUnitTests
         [Fact(DisplayName = "Get all hotels with pagination")]
         public async Task GetAllHotelsAsync_ShouldReturnPagedList()
         {
-            _hotelRepoMock.Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
-                          .ReturnsAsync(new List<Hotel> { new Hotel(), new Hotel() });
+            _hotelRepoMock.Setup(r => r.GetAllAsync(1, 20)) 
+                .ReturnsAsync(new List<Hotel>
+                {
+                    new Hotel
+                    {
+                        Name = "Test Hotel 1",
+                        StarRating = 4,
+                        City = new City { Name = "Paris" },
+                        Rooms = new List<Room> { new Room { PricePerNight = 100 } }
+                    },
+                    new Hotel
+                    {
+                        Name = "Test Hotel 2",
+                        StarRating = 5,
+                        City = new City { Name = "London" },
+                        Rooms = new List<Room> { new Room { PricePerNight = 150 } }
+                    }
+                });
 
             var result = await _service.GetAllHotelsAsync(1, 20);
 
             Assert.Equal(2, result.Count);
+
             _hotelRepoMock.Verify(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
 
