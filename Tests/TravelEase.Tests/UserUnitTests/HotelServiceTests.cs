@@ -75,11 +75,7 @@ namespace TravelEase.TravelEase.Tests.UserUnitTests
         public async Task GetAllHotelsAsync_ShouldReturnPagedList()
         {
             _hotelRepoMock.Setup(r => r.GetAllAsync(It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync(new List<Hotel>
-                {
-                    new Hotel(),
-                    new Hotel()
-                });
+                .ReturnsAsync(new List<Hotel> { new Hotel(), new Hotel() });
 
             var result = await _service.GetAllHotelsAsync(1, 20);
 
@@ -170,10 +166,7 @@ namespace TravelEase.TravelEase.Tests.UserUnitTests
                 .Returns(Task.CompletedTask);
 
             using var mockStream = new MemoryStream(new byte[] { 0x1, 0x2, 0x3 });
-            var files = new List<(string FileName, Stream Content)>
-            {
-                ("test.jpg", mockStream)
-            };
+            var files = new List<(string FileName, Stream Content)> { ("test.jpg", mockStream) };
 
             var result = await _service.UploadImagesAsync(1, files);
 

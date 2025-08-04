@@ -81,12 +81,34 @@ public class RoomServiceTests
     [Fact(DisplayName = "Delete room when not found does nothing")]
     public async Task DeleteRoomAsync_ShouldNotFail_WhenRoomNotFound()
     {
-        _roomRepoMock.Setup(r => r.GetRoomByIdAsync(999)).ReturnsAsync((Room)null);
+        _roomRepoMock.Setup(r => r.GetRoomByIdAsync(999)).ReturnsAsync((Room?)null);
 
         await _service.DeleteRoomAsync(999);
 
         _roomRepoMock.Verify(r => r.DeleteRoomAsync(It.IsAny<Room>()), Times.Never);
     }
+
+    [Fact(DisplayName = "Update room when not found should throw")]
+    public async Task UpdateRoomAsync_ShouldThrow_WhenNotFound()
+    {
+        var cmd = new UpdateRoomCommand
+        {
+            Id = 999,
+            Number = "X",
+            CapacityAdults = 0,
+            CapacityChildren = 0,
+            PricePerNight = 0,
+            Category = (int)RoomCategory.Standard,
+            HotelId = 1
+        };
+
+        _roomRepoMock.Setup(r => r.GetRoomByIdAsync(999)).ReturnsAsync((Room?)null);
+
+        var ex = await Assert.ThrowsAsync<Exception>(() => _service.UpdateRoomAsync(cmd));
+
+        Assert.Equal("Room not found", ex.Message);
+    }
+
 
     [Fact(DisplayName = "Update room when found")]
     public async Task UpdateRoomAsync_ShouldUpdateRoom()
@@ -111,27 +133,6 @@ public class RoomServiceTests
         Assert.Equal("305", room.Number);
         Assert.Equal(RoomCategory.Suite, room.Category);
         _roomRepoMock.Verify(r => r.UpdateRoomAsync(room), Times.Once);
-    }
-
-    [Fact(DisplayName = "Update room when not found should throw")]
-    public async Task UpdateRoomAsync_ShouldThrow_WhenNotFound()
-    {
-        var cmd = new UpdateRoomCommand
-        {
-            Id = 999,
-            Number = "X",
-            CapacityAdults = 0,
-            CapacityChildren = 0,
-            PricePerNight = 0,
-            Category = (int)RoomCategory.Standard,
-            HotelId = 1
-        };
-
-        _roomRepoMock.Setup(r => r.GetRoomByIdAsync(999)).ReturnsAsync((Room)null);
-
-        var ex = await Assert.ThrowsAsync<Exception>(() => _service.UpdateRoomAsync(cmd));
-
-        Assert.Equal("Room not found", ex.Message);
     }
 
     [Fact(DisplayName = "Search rooms returns filtered result")]
