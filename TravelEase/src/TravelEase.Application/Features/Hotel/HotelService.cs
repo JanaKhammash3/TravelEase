@@ -1,5 +1,4 @@
-﻿using TravelEase.TravelEase.Domain.Entities;
-using TravelEase.TravelEase.Application.DTOs;
+﻿using TravelEase.TravelEase.Application.DTOs;
 using TravelEase.TravelEase.Application.Interfaces;
 
 namespace TravelEase.TravelEase.Application.Features.Hotel
@@ -15,7 +14,8 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
 
         public async Task<List<HotelDto>> GetAllHotelsAsync(int page = 1, int pageSize = 20)
         {
-            var hotels = await _hotelRepository.GetAllAsync(page, pageSize) ?? new List<global::TravelEase.TravelEase.Domain.Entities.Hotel>();
+            var hotels = await _hotelRepository.GetAllAsync(page, pageSize)
+                         ?? new List<Domain.Entities.Hotel>();
 
             return hotels.Select(h => new HotelDto
             {
@@ -50,7 +50,7 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
 
         public async Task CreateHotelAsync(CreateHotelCommand cmd)
         {
-            var hotel = new global::TravelEase.TravelEase.Domain.Entities.Hotel
+            var hotel = new Domain.Entities.Hotel
             {
                 Name = cmd.Name,
                 CityId = cmd.CityId,
@@ -58,7 +58,7 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                 Location = cmd.Location,
                 StarRating = cmd.StarRating,
                 Description = cmd.Description,
-                Amenities = "" // avoid null insert errors
+                Amenities = ""
             };
 
             await _hotelRepository.AddAsync(hotel);
@@ -88,9 +88,11 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
 
         public async Task<List<HotelDto>> SearchHotelsAsync(SearchHotelsQuery query)
         {
-            // Null-safe list retrieval with pagination support
-            var hotels = await _hotelRepository.GetAllAsync(query.Page, query.PageSize) 
-                         ?? new List<global::TravelEase.TravelEase.Domain.Entities.Hotel>();
+            var page = query.Page;
+            var pageSize = query.PageSize;
+
+            var hotels = await _hotelRepository.GetAllAsync(page, pageSize)
+                         ?? new List<Domain.Entities.Hotel>();
 
             var filtered = hotels.AsQueryable();
 
@@ -141,8 +143,8 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
             }
 
             return filtered
-                .Skip((query.Page - 1) * query.PageSize)
-                .Take(query.PageSize)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .Select(h => new HotelDto
                 {
                     Id = h.Id,
@@ -159,7 +161,7 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
 
         public async Task<List<HotelDto>> GetFeaturedHotelsAsync()
         {
-            var hotels = await _hotelRepository.GetFeaturedHotelsAsync() ?? new List<global::TravelEase.TravelEase.Domain.Entities.Hotel>();
+            var hotels = await _hotelRepository.GetFeaturedHotelsAsync() ?? new List<Domain.Entities.Hotel>();
 
             return hotels.Select(h => new HotelDto
             {
@@ -211,8 +213,7 @@ namespace TravelEase.TravelEase.Application.Features.Hotel
                     await file.Content.CopyToAsync(stream);
                 }
 
-                var imageUrl = $"/hotel-images/{newFileName}";
-                imageUrls.Add(imageUrl);
+                imageUrls.Add($"/hotel-images/{newFileName}");
             }
 
             await _hotelRepository.SaveHotelImageUrlsAsync(hotelId, imageUrls);
